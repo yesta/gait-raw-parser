@@ -61,8 +61,4 @@ public class FileParser
         
         return points;
     }
-    
-    public static void main(String[] args){
-        FileParser.parseFile("C:/GAITRITE39/Raw434.txt");
-    }
 }
