@@ -12,6 +12,7 @@ public class PressurePoint {
 	private int objectNumber;
 	private Foot foot;
 	private boolean partOfFoot;
+	
 
 	public void setPartOfFoot(boolean partOfFoot) {
 		this.partOfFoot = partOfFoot;
