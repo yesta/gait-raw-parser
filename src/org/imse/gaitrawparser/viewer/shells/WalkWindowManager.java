@@ -69,7 +69,7 @@ public class WalkWindowManager {
 	
 	private void loadWalk() {
 		String selected = null;
-		//selected = "/Users/matej/Uni/IDP/Raw397.Txt";
+		selected = "/Users/matej/Uni/IDP/Raw397.Txt";
 		if (selected == null) {
 			FileDialog fd = new FileDialog(window, SWT.OPEN);
 			fd.setText("Open Raw");
@@ -78,9 +78,10 @@ public class WalkWindowManager {
 				return;
 			}
 		}
-		List<PressurePoint> points = FileParser.parseFile(selected);
+		FileParser.parseFile(selected);
+		List<PressurePoint> points = FileParser.getPoints();
 		timeWindowManager.setStepsCount(points.size());
-		canvas.setPressurePoints(points);
+		canvas.setPressurePoints(points, FileParser.getMaxX(), FileParser.getMaxY());
 		/*Point size = canvas.calculateDimensionsFromPressurePoints();
 		window.setSize(size);
 		canvas.setSize(size);*/
