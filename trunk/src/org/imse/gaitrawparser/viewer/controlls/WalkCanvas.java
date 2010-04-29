@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.imse.gaitrawparser.data.PressurePoint;
+import org.imse.gaitrawparser.data.PressurePoint.Foot;
 
 public class WalkCanvas extends Canvas implements PaintListener {
 
@@ -21,6 +22,8 @@ public class WalkCanvas extends Canvas implements PaintListener {
 	private int scale = 3;
 	private Color[] colors;
 	private int stepsCount = 0;
+	private int maxX;
+	private int maxY;
 
 	public WalkCanvas(Composite parent, int style) {
 		super(parent, style);
@@ -28,7 +31,9 @@ public class WalkCanvas extends Canvas implements PaintListener {
 	    setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 	}
 	
-	public void setPressurePoints(List<PressurePoint> points) {
+	public void setPressurePoints(List<PressurePoint> points, int maxX, int maxY) {
+		this.maxX = maxX;
+		this.maxY = maxY;
 		this.points = points;
 	}
 
@@ -68,21 +73,24 @@ public class WalkCanvas extends Canvas implements PaintListener {
 
 	public void paintControl(PaintEvent e) {
 		GC gc = e.gc;
+		gc.setBackground(new Color(e.display, 240, 240, 240));
+		gc.fillRectangle(0, 0, (maxX + 1) * scale, (maxY + 1) * scale);
 		if (points == null) {
 			return;
 		}
+		
 		int i = 1;
 		for (PressurePoint p : points) {
 			if (i > stepsCount) {
 				return;
 			}
 			i++;
-			gc.setBackground(getColorForPressure(p.getPressure(), e.display));
-			gc.fillRectangle(p.getX() * (scale + 1), p.getY() * (scale + 1), scale, scale);
+			gc.setBackground(getColorForPoint(p, e.display));
+			gc.fillRectangle(p.getX() * (scale), p.getY() * (scale), scale, scale);
 		}
 	}
 	
-	private Color getColorForPressure(int pressure, Device device) {
+	private Color getColorForPoint(PressurePoint p, Device device) {
 		if (colors == null) {
 			colors = new Color[8];
 			colors[0] = new Color(device, 181, 213, 254);
@@ -94,7 +102,12 @@ public class WalkCanvas extends Canvas implements PaintListener {
 			colors[6] = new Color(device, 0, 82, 39);
 			colors[7] = new Color(device, 0, 0, 0);
 		}
-		return colors[pressure];
+		//return colors[p.getPressure()];
+		if (p.getFoot() == Foot.Left) {
+			return colors[0];
+		} else {
+			return colors[1];
+		}
 	}
 	
 	public void setStepsCount(int count) {
