@@ -20,7 +20,7 @@ public class WalkCanvas extends Canvas implements PaintListener {
 	private List<PressurePoint> points;
 	private int width;
 	private int height;
-	private int scale = 10;
+	private int scale = 5;
 	private Color[] colors;
 	private int stepsCount = 0;
 	private int lenX;
@@ -78,9 +78,6 @@ public class WalkCanvas extends Canvas implements PaintListener {
 		gc.setForeground(new Color(e.display, 0, 0, 0));
 		double scaleD = (double) scale;
 		for (FootPrint fp : footPrints) {
-			if (fp.getFoot() == Foot.Right) {
-				continue;
-			}
 			gc.drawLine((int) (fp.getA().x * scaleD), (int) (fp.getA().y * scaleD), (int) (fp.getG().x * scaleD), (int) (fp.getG().y * scaleD));
 		}
 	}
@@ -97,12 +94,12 @@ public class WalkCanvas extends Canvas implements PaintListener {
 			colors[6] = new Color(device, 0, 82, 39);
 			colors[7] = new Color(device, 0, 0, 0);
 		}
-		//return colors[p.getPressure()];
-		if (p.getFoot() == Foot.Left) {
+		return colors[p.getPressure()];
+		/*if (p.getFoot() == Foot.Left) {
 			return colors[0];
 		} else {
 			return colors[1];
-		}
+		}*/
 	}
 	
 	public void setStepsCount(int count) {
