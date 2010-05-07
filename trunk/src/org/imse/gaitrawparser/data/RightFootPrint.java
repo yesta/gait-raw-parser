@@ -19,26 +19,34 @@ public class RightFootPrint extends FootPrint {
 
 	@Override
 	protected Line getInnerLine(Point p1, Point p2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected List<Point> getInnerPoints() {
-		// TODO Auto-generated method stub
-		return null;
+		if (p1.y > p2.y) {
+			return new Line(p1.x, p1.y, p2.x, p2.y);
+		} else {
+			return new Line(p1.x + 1, p1.y, p2.x + 1, p2.y);
+		}
 	}
 
 	@Override
 	protected double getTargetAngle() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 0.1;
 	}
 
 	@Override
-	protected boolean allPointsOutside(Line l) {
-		// TODO Auto-generated method stub
-		return false;
+	protected boolean isOutside(double py, double yl, double yr) {
+		if (yl > py || yr > py) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	protected boolean isInnerPoint(int x, int y) {
+		if (y - 1 >= 0 && pixel[x][y - 1] == false) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

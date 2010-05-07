@@ -12,6 +12,7 @@ public abstract class FootPrint {
 	protected List<Point> takenPoints = new ArrayList<Point>();
 	protected List<PressurePoint> pressurePoints = new ArrayList<PressurePoint>();
 	protected double firstTouchTime;
+	protected List<Point> innerPoints;
 	protected int lenY;
 	protected int lenX;
 
@@ -27,17 +28,19 @@ public abstract class FootPrint {
 	}
 	
 	public void calculateALRG() {
-		if (getFoot() == Foot.Right) {
-			return;
-		}
-		List<Point> points = getInnerPoints();
+		calculateInnerPoints();
 		double minDiff = Double.MAX_VALUE;
-		double minDistance = 15;
+		double minDistance = 8;
 		while (a == null && g == null) {
-			for (int i = 0; i < points.size(); i++) {
-				for (int j = i + 1; j < points.size(); j++) {
-					Point p1 = points.get(i);
-					Point p2 = points.get(j);
+			for (int i = 0; i < innerPoints.size(); i++) {
+				for (int j = i + 1; j < innerPoints.size(); j++) {
+					Point p1 = innerPoints.get(i);
+					Point p2 = innerPoints.get(j);
+					if (p1.x > p2.x) {
+						Point temp = p1;
+						p1 = p2;
+						p2 = temp;
+					}
 					Line l = getInnerLine(p1, p2);
 					if (distance(p1, p2) < minDistance) {
 						continue;
@@ -67,11 +70,42 @@ public abstract class FootPrint {
 		return Math.atan((l.getP2().y - l.getP1().y) / (l.getP2().x - l.getP1().x));
 	}
 
-	protected abstract boolean allPointsOutside(Line l);
+	protected boolean allPointsOutside(Line l) {
+		calculateInnerPoints();
+		for (Point p : innerPoints) {
+			if ((p.x == (int) l.getP1().x && p.y == (int) l.getP1().y) ||
+					(p.x == (int) l.getP2().x && p.y == (int) l.getP2().y)) {
+				continue;
+			}
+			double yl = l.getYForX(p.x);
+			double yr = l.getYForX(p.x + 1);
+			if (!isOutside(p.y, yl, yr)) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
-	protected abstract List<Point> getInnerPoints();
+	protected abstract boolean isOutside(double py, double yl, double yr);
+
+	public void calculateInnerPoints() {
+		if (innerPoints == null) {
+			innerPoints = new ArrayList<Point>();
+			for (int i = 0; i < lenX; i++) {
+				for (int j = 0; j < lenY; j++) {
+					if (pixel[i][j]) {
+						if (isInnerPoint(i, j)) {
+							innerPoints.add(new Point(i, j));
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	protected abstract Line getInnerLine(Point p1, Point p2);	
+	
+	protected abstract boolean isInnerPoint(int x, int y);
 	
 	protected abstract double getTargetAngle();
 
