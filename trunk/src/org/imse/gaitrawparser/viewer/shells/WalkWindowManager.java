@@ -81,7 +81,7 @@ public class WalkWindowManager {
 		FileParser.parseFile(selected);
 		List<PressurePoint> points = FileParser.getPoints();
 		timeWindowManager.setStepsCount(points.size());
-		canvas.setPressurePoints(points, FileParser.getMaxX(), FileParser.getMaxY());
+		canvas.setData(points, FileParser.getFootPrints(), FileParser.getLenX(), FileParser.getLenY());
 		/*Point size = canvas.calculateDimensionsFromPressurePoints();
 		window.setSize(size);
 		canvas.setSize(size);*/
