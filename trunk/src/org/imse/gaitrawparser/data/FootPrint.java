@@ -13,6 +13,7 @@ public abstract class FootPrint {
 	protected List<PressurePoint> pressurePoints = new ArrayList<PressurePoint>();
 	protected double firstTouchTime;
 	protected List<Point> innerPoints;
+	protected List<Point> outerPoints;
 	protected int lenY;
 	protected int lenX;
 
@@ -41,24 +42,57 @@ public abstract class FootPrint {
 						p1 = p2;
 						p2 = temp;
 					}
-					Line l = getInnerLine(p1, p2);
+					Line line = getInnerLine(p1, p2);
 					if (distance(p1, p2) < minDistance) {
 						continue;
 					}
-					double diff = Math.abs(getTargetAngle() - getAngle(l));
-					if (allPointsOutside(l) && diff < minDiff) {
+					double diff = Math.abs(getTargetAngleAG() - getAngle(line));
+					if (allPointsOutside(line, true) && diff < minDiff) {
 						minDiff = diff;
-						if (l.getP1().x < l.getP2().x) {
-							a = l.getP1();
-							g = l.getP2();
+						if (line.getP1().x < line.getP2().x) {
+							a = line.getP1();
+							g = line.getP2();
 						} else {
-							a = l.getP2();
-							g = l.getP1();
+							a = line.getP2();
+							g = line.getP1();
 						}
 					}
 				}
 			}
 			minDistance = minDistance - 1;
+		}
+		
+		calculateOuterPoints();
+		minDiff = Double.MAX_VALUE;
+        minDistance = 8;
+		while ( l == null && r == null){
+		    for (int i = 0; i < outerPoints.size(); i++) {
+                for (int j = i + 1; j < outerPoints.size(); j++) {
+                    Point p1 = outerPoints.get(i);
+                    Point p2 = outerPoints.get(j);
+                    if (p1.x > p2.x) {
+                        Point temp = p1;
+                        p1 = p2;
+                        p2 = temp;
+                    }
+                    Line line = getOuterLine(p1, p2);
+                    if (distance(p1, p2) < minDistance) {
+                        continue;
+                    }
+                    double diff = Math.abs(getTargetAngleLR() - getAngle(line));
+                    if (allPointsOutside(line, false) && diff < minDiff) {
+                        minDiff = diff;
+                        if (line.getP1().x < line.getP2().x) {
+                            l = line.getP1();
+                            r = line.getP2();
+                        } else {
+                            l = line.getP2();
+                            r = line.getP1();
+                        }
+                    }
+                }   
+		    }
+		    minDistance = minDistance - 1;
 		}
 	}
 	
@@ -70,23 +104,36 @@ public abstract class FootPrint {
 		return Math.atan((l.getP2().y - l.getP1().y) / (l.getP2().x - l.getP1().x));
 	}
 
-	protected boolean allPointsOutside(Line l) {
-		calculateInnerPoints();
-		for (Point p : innerPoints) {
+	protected boolean allPointsOutside(Line l, boolean calculatingInnerLine) {
+	    List<Point> points;
+	    if (calculatingInnerLine){
+	        calculateInnerPoints();
+	        points = innerPoints;
+	    } else {
+	        calculateOuterPoints();
+	        points = outerPoints;
+	    }
+		
+		for (Point p : points) {
 			if ((p.x == (int) l.getP1().x && p.y == (int) l.getP1().y) ||
 					(p.x == (int) l.getP2().x && p.y == (int) l.getP2().y)) {
 				continue;
 			}
 			double yl = l.getYForX(p.x);
 			double yr = l.getYForX(p.x + 1);
-			if (!isOutside(p.y, yl, yr)) {
-				return false;
+			if (calculatingInnerLine){
+			    if (!isOutsideInnerLine(p.y, yl, yr)) {
+			        return false;
+			    }
+			} else{
+			    if (!isOutsideOuterLine(p.y, yl, yr)) {
+                    return false;
+                }
 			}
 		}
 		return true;
 	}
 	
-	protected abstract boolean isOutside(double py, double yl, double yr);
 
 	public void calculateInnerPoints() {
 		if (innerPoints == null) {
@@ -103,11 +150,36 @@ public abstract class FootPrint {
 		}
 	}
 	
-	protected abstract Line getInnerLine(Point p1, Point p2);	
+	public void calculateOuterPoints() {
+	    if(outerPoints == null) {
+	        outerPoints = new ArrayList<Point>();
+	        for (int i = 0; i < lenX; i++) {
+                for (int j = 0; j < lenY; j++) {
+                    if (pixel[i][j]) {
+                        if (isOuterPoint(i, j)) {
+                            outerPoints.add(new Point(i, j));
+                        }
+                    }
+                }
+            }
+	    }
+	}
+	
+	protected abstract boolean isOutsideInnerLine(double py, double yl, double yr);
+	
+	protected abstract boolean isOutsideOuterLine(double py, double yl, double yr);
+	
+	protected abstract Line getInnerLine(Point p1, Point p2);
+	
+	protected abstract Line getOuterLine(Point p1, Point p2);
 	
 	protected abstract boolean isInnerPoint(int x, int y);
 	
-	protected abstract double getTargetAngle();
+	protected abstract boolean isOuterPoint(int x, int y);
+	
+	protected abstract double getTargetAngleAG();
+	
+	protected abstract double getTargetAngleLR();
 
 	public void addPressurePoint(PressurePoint p) {
 		if (!pixel[p.getX()][p.getY()]) {
@@ -134,4 +206,11 @@ public abstract class FootPrint {
 		return g;
 	}
 	
+	public DoublePoint getL() {
+	    return l;
+	}
+	
+	public DoublePoint getR() {
+	    return r;
+	}
 }

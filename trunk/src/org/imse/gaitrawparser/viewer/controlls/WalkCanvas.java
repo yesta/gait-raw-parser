@@ -79,6 +79,7 @@ public class WalkCanvas extends Canvas implements PaintListener {
 		double scaleD = (double) scale;
 		for (FootPrint fp : footPrints) {
 			gc.drawLine((int) (fp.getA().x * scaleD), (int) (fp.getA().y * scaleD), (int) (fp.getG().x * scaleD), (int) (fp.getG().y * scaleD));
+		    gc.drawLine((int) (fp.getL().x * scaleD), (int) (fp.getL().y * scaleD), (int) (fp.getR().x * scaleD), (int) (fp.getR().y * scaleD));
 		}
 	}
 	
