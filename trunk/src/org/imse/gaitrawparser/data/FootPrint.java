@@ -1,6 +1,8 @@
 package org.imse.gaitrawparser.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
@@ -32,7 +34,10 @@ public abstract class FootPrint {
 		calculateInnerPoints();
 		double minDiff = Double.MAX_VALUE;
 		double minDistance = 8;
-		while (a == null && g == null) {
+		
+		Line agLine = null;
+		
+		while (agLine == null) {
 			for (int i = 0; i < innerPoints.size(); i++) {
 				for (int j = i + 1; j < innerPoints.size(); j++) {
 					Point p1 = innerPoints.get(i);
@@ -47,15 +52,9 @@ public abstract class FootPrint {
 						continue;
 					}
 					double diff = Math.abs(getTargetAngleAG() - getAngle(line));
-					if (allPointsOutside(line, true) && diff < minDiff) {
+					if (allPointsOnOneSideOfLine(line) && diff < minDiff) {
 						minDiff = diff;
-						if (line.getP1().x < line.getP2().x) {
-							a = line.getP1();
-							g = line.getP2();
-						} else {
-							a = line.getP2();
-							g = line.getP1();
-						}
+						agLine = new Line(line.getP1(), line.getP2());
 					}
 				}
 			}
@@ -65,7 +64,10 @@ public abstract class FootPrint {
 		calculateOuterPoints();
 		minDiff = Double.MAX_VALUE;
         minDistance = 8;
-		while ( l == null && r == null){
+        
+        Line lrLine = null;
+        
+		while (lrLine == null) {
 		    for (int i = 0; i < outerPoints.size(); i++) {
                 for (int j = i + 1; j < outerPoints.size(); j++) {
                     Point p1 = outerPoints.get(i);
@@ -80,19 +82,90 @@ public abstract class FootPrint {
                         continue;
                     }
                     double diff = Math.abs(getTargetAngleLR() - getAngle(line));
-                    if (allPointsOutside(line, false) && diff < minDiff) {
+                    if (allPointsOnOneSideOfLine(line) && diff < minDiff) {
                         minDiff = diff;
-                        if (line.getP1().x < line.getP2().x) {
-                            l = line.getP1();
-                            r = line.getP2();
-                        } else {
-                            l = line.getP2();
-                            r = line.getP1();
-                        }
+                        lrLine = new Line(line.getP1(), line.getP2());
                     }
                 }   
 		    }
 		    minDistance = minDistance - 1;
+		}
+		
+		// L berechnen
+		calculateInnerPoints();
+		Line normal = null;
+		
+		Collections.sort(takenPoints, new Comparator<Point>() {
+
+			@Override
+			public int compare(Point p1, Point p2) {
+				if (p1.x < p2.x) {
+					return -1;
+				} else if (p1.x == p2.x) {
+					return 0;
+				} else {
+					return 1;
+				}
+			}
+		});
+		
+		for (int i = 0; i < takenPoints.size(); i++) {
+			normal = getHeelNormalThroughPoint(agLine, takenPoints.get(i));
+			if (allPointsOnOneSideOfLine(normal)) {
+				break;
+			} else {
+				normal = null;
+			}
+		}
+		
+		a = normal.getIntersection(agLine);
+		l = normal.getIntersection(lrLine);
+		
+		for (int i = takenPoints.size() - 1; i >= 0; i--) {
+			normal = getToeNormalThroughPoint(agLine, takenPoints.get(i));
+			if (allPointsOnOneSideOfLine(normal)) {
+				break;
+			} else {
+				normal = null;
+			}
+		}
+		
+		
+		g = normal.getIntersection(agLine);
+		r = normal.getIntersection(lrLine);
+		
+		
+		/*a = new DoublePoint(normal.getP1());
+		g = new DoublePoint(normal.getP2());
+
+		l = new DoublePoint(lrLine.getP1());
+		r = new DoublePoint(lrLine.getP2());*/
+		
+		/*a = new DoublePoint(agLine.getP1());
+		l = new DoublePoint(lrLine.getP1());
+		g = new DoublePoint(agLine.getP2());
+		r = new DoublePoint(lrLine.getP2());*/
+	}
+	
+	private Line getHeelNormalThroughPoint(Line agLine, Point p) {
+		Point normalVector = new Point(-agLine.getA().y, agLine.getA().x);
+		if (Math.signum(agLine.getA().x) != Math.signum(agLine.getA().y)) {
+			// Rechter oberer
+			return new Line(p.x + 1, p.y, p.x + 1 + normalVector.x, p.y + normalVector.y);
+		} else {
+			// Rechter unterer
+			return new Line(p.x + 1, p.y + 1, p.x + 1 + normalVector.x, p.y + 1 + normalVector.y);
+		}
+	}
+	
+	private Line getToeNormalThroughPoint(Line agLine, Point p) {
+		Point normalVector = new Point(-agLine.getA().y, agLine.getA().x);
+		if (Math.signum(agLine.getA().x) != Math.signum(agLine.getA().y)) {
+			// Linker unterer Eckpunkt
+			return new Line(p.x, p.y + 1, p.x + normalVector.x, p.y + 1 + normalVector.y);
+		} else {
+			// Linker oberer Eckpunkt
+			return new Line(p.x, p.y, p.x + normalVector.x, p.y + normalVector.y);
 		}
 	}
 	
@@ -104,31 +177,30 @@ public abstract class FootPrint {
 		return Math.atan((l.getP2().y - l.getP1().y) / (l.getP2().x - l.getP1().x));
 	}
 
-	protected boolean allPointsOutside(Line l, boolean calculatingInnerLine) {
-	    List<Point> points;
-	    if (calculatingInnerLine){
-	        calculateInnerPoints();
-	        points = innerPoints;
-	    } else {
-	        calculateOuterPoints();
-	        points = outerPoints;
-	    }
-		
-		for (Point p : points) {
-			if ((p.x == (int) l.getP1().x && p.y == (int) l.getP1().y) ||
-					(p.x == (int) l.getP2().x && p.y == (int) l.getP2().y)) {
-				continue;
-			}
-			double yl = l.getYForX(p.x);
-			double yr = l.getYForX(p.x + 1);
-			if (calculatingInnerLine){
-			    if (!isOutsideInnerLine(p.y, yl, yr)) {
-			        return false;
-			    }
-			} else{
-			    if (!isOutsideOuterLine(p.y, yl, yr)) {
-                    return false;
-                }
+	protected boolean allPointsOnOneSideOfLine(Line l) {
+		int side = 0;
+		int newSide = 0;
+		for (Point p : takenPoints) {
+			for (int i = 0; i <= 1; i++) {
+				for (int j = 0; j <= 1; j++) {
+					double px = (double) p.x + i;
+					double py = (double) p.y + j;
+					if (l.getA().y != 0) {
+						// Keine Waagrechte
+						double d = l.getXForY(py) - px;
+						newSide = (int) Math.signum(d);
+					} else {
+						// Keine Senkrechte
+						double d = l.getYForX(px) - py;
+						newSide = (int) Math.signum(d);
+					}
+					if (side == 0) {
+						side = newSide;
+					}
+					if (newSide != 0 && newSide != side) {
+						return false;
+					}
+				}
 			}
 		}
 		return true;
@@ -164,10 +236,6 @@ public abstract class FootPrint {
             }
 	    }
 	}
-	
-	protected abstract boolean isOutsideInnerLine(double py, double yl, double yr);
-	
-	protected abstract boolean isOutsideOuterLine(double py, double yl, double yr);
 	
 	protected abstract Line getInnerLine(Point p1, Point p2);
 	

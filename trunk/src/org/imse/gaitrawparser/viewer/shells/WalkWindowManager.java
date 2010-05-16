@@ -69,7 +69,7 @@ public class WalkWindowManager {
 	
 	private void loadWalk() {
 		String selected = null;
-		selected = "/Users/matej/Uni/IDP/Raw397.Txt";
+		//selected = "/Users/matej/Uni/IDP/Raw425.Txt";
 		if (selected == null) {
 			FileDialog fd = new FileDialog(window, SWT.OPEN);
 			fd.setText("Open Raw");

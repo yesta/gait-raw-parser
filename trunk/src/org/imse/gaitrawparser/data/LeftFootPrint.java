@@ -26,8 +26,7 @@ public class LeftFootPrint extends FootPrint {
 
 	@Override
 	protected boolean isInnerPoint(int x, int y) {
-	    //TODO y = lenY - 1
-		if (y + 1 < lenY && pixel[x][y + 1] == false) {
+		if (y == lenY - 1 || (y + 1 < lenY && pixel[x][y + 1] == false)) {
 			return true;
 		} else {
 			return false;
@@ -39,24 +38,13 @@ public class LeftFootPrint extends FootPrint {
 		return -0.1;
 	}
 
-	@Override
-	protected boolean isOutsideInnerLine(double py, double yl, double yr) {
-		if (yl < py + 1 || yr < py + 1) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
     @Override
     protected boolean isOuterPoint(int x, int y){
-        if(y == 0){
+        if (y == 0 || (y - 1 >= 0 && pixel[x][y - 1] == false)) {
             return true;
+        } else {
+        	return false;
         }
-        else if (y - 1 >= 0 && pixel[x][y - 1] == false) {
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -73,15 +61,7 @@ public class LeftFootPrint extends FootPrint {
         return -0.1;
     }
 
-    @Override
-    protected boolean isOutsideOuterLine(double py, double yl, double yr){
-        if(py < yl || py < yr){
-           return false; 
-        } else {
-            return true;
-        }
-       
-    }
+
 
 	
 
