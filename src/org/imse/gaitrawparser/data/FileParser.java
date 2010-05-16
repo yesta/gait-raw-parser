@@ -32,7 +32,7 @@ public class FileParser {
 		points = new ArrayList<PressurePoint>();
 
 		String input = "";
-		String[] temp = new String[7];
+		String[] temp;
 
 		lenX = 0;
 		lenY = 0;
@@ -80,12 +80,22 @@ public class FileParser {
 			}
 		}
 		
+
+		
+		int oldLenX = lenX;
+		int oldLenY = lenY;
+		
+		lenX = lenX + 20;
+		lenY = lenY + 20;
+		
 		PressurePoint[][] mat = new PressurePoint[lenX][lenY];
 		for (PressurePoint p : points) {
 			if (rotate) {
-				p.setX(lenX - 1 - p.getX());
-				p.setY(lenY - 1 - p.getY());
+				p.setX(oldLenX - 1 - p.getX());
+				p.setY(oldLenY - 1 - p.getY());
 			}
+			p.setX(p.getX() + 15);
+			p.setY(p.getY() + 15);
 			if (p.isPartOfFoot()) {
 				mat[p.getX()][p.getY()] = p;
 			}
