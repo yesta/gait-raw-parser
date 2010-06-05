@@ -21,7 +21,12 @@ public class StepLengthCalculator implements MetricCalculator {
 			DoubleLine ldLine = new DoubleLine(footPrints.get(i + 1).getHeelCenter(), new DoublePoint(footPrints.get(i + 1).getHeelCenter().x + agNormal.x, footPrints.get(i + 1).getHeelCenter().y + agNormal.y));
 			DoublePoint l = agLine.getIntersection(ldLine);
 			DoublePoint alVector = new DoublePoint(l.x - footPrints.get(i).getHeelCenter().x, l.y - footPrints.get(i).getHeelCenter().y);
-			result.setValueForStep(i + 1, Math.sqrt(alVector.x * alVector.x + alVector.y * alVector.y));
+			double alLength = alVector.getLength();
+			DoublePoint agVector = agLine.getA();
+			if ((new DoublePoint(alVector.x + agVector.x, alVector.y + agVector.y)).getLength() < agVector.getLength()) {
+				alLength *= -1;
+			}
+			result.setValueForStep(i + 1, alLength);
 		}
 
 		result.setValueForStep(footPrints.size() - 1, 0);
