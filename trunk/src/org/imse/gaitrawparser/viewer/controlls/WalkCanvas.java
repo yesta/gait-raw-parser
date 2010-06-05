@@ -77,11 +77,19 @@ public class WalkCanvas extends Canvas implements PaintListener {
 		gc.setLineStyle(SWT.LINE_SOLID);
 		gc.setForeground(new Color(e.display, 0, 0, 0));
 		double scaleD = (double) scale;
-		for (FootPrint fp : footPrints) {
+		for (int j = 0; j < footPrints.size(); j++) {
+			FootPrint fp = footPrints.get(j);
 			gc.drawLine((int) (fp.getA().x * scaleD), (int) (fp.getA().y * scaleD), (int) (fp.getG().x * scaleD), (int) (fp.getG().y * scaleD));
 		    gc.drawLine((int) (fp.getL().x * scaleD), (int) (fp.getL().y * scaleD), (int) (fp.getR().x * scaleD), (int) (fp.getR().y * scaleD));
 		    gc.drawLine((int) (fp.getA().x * scaleD), (int) (fp.getA().y * scaleD), (int) (fp.getL().x * scaleD), (int) (fp.getL().y * scaleD));
 		    gc.drawLine((int) (fp.getG().x * scaleD), (int) (fp.getG().y * scaleD), (int) (fp.getR().x * scaleD), (int) (fp.getR().y * scaleD));
+		    gc.drawLine((int) (fp.getC().x * scaleD), (int) (fp.getC().y * scaleD), (int) (fp.getN().x * scaleD), (int) (fp.getN().y * scaleD));
+		    gc.drawLine((int) (fp.getP().x * scaleD), (int) (fp.getP().y * scaleD), (int) (fp.getE().x * scaleD), (int) (fp.getE().y * scaleD));
+		
+		    if (j < footPrints.size() - 1) {
+		    	FootPrint nextFP = footPrints.get(j + 1);
+		    	gc.drawLine((int) (fp.getHeelCenter().x * scaleD), (int) (fp.getHeelCenter().y * scaleD), (int) (nextFP.getHeelCenter().x * scaleD), (int) (nextFP.getHeelCenter().y * scaleD));
+		    }
 		}
 	}
 	

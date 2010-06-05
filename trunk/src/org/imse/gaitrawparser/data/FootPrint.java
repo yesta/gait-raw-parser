@@ -23,6 +23,12 @@ public abstract class FootPrint {
 	private DoublePoint l;
 	private DoublePoint r;
 	private DoublePoint g;
+
+	private DoublePoint c;
+	private DoublePoint e;
+	private DoublePoint p;
+	private DoublePoint n;
+	private DoublePoint heelCenter;
 	
 	public FootPrint(int lenX, int lenY) {
 		this.lenX = lenX;
@@ -147,18 +153,30 @@ public abstract class FootPrint {
 		r = new DoublePoint(lrLine.getP2());*/
 	}
 	
-	private Line getHeelNormalThroughPoint(Line agLine, Point p) {
-		Point normalVector = new Point(-agLine.getA().y, agLine.getA().x);
-		if (Math.signum(agLine.getA().x) != Math.signum(agLine.getA().y)) {
-			// Rechter oberer
-			return new Line(p.x + 1, p.y, p.x + 1 + normalVector.x, p.y + normalVector.y);
-		} else {
-			// Rechter unterer
-			return new Line(p.x + 1, p.y + 1, p.x + 1 + normalVector.x, p.y + 1 + normalVector.y);
+	public void calculateCNPE() {
+		if (g == null || r == null || a == null || l == null) {
+			throw new RuntimeException("You have to calculate ALRG first.");
 		}
+		
+		
+		DoublePoint agVector = new DoublePoint(g.x - a.x, g.y - a.y);
+		
+		c = new DoublePoint(a.x + agVector.x * 1/3, a.y + agVector.y * 1/3);
+		e = new DoublePoint(a.x + agVector.x * 2/3, a.y + agVector.y * 2/3);
+		
+		DoublePoint agNormal = new DoublePoint(agVector.y, -agVector.x);
+
+		DoubleLine cn = new DoubleLine(c, new DoublePoint(c.x + agNormal.x, c.y + agNormal.y));
+		DoubleLine ep = new DoubleLine(e, new DoublePoint(e.x + agNormal.x, e.y + agNormal.y));
+		
+		DoubleLine lrLine = new DoubleLine(l, r);
+		n = lrLine.getIntersection(cn);
+		p = lrLine.getIntersection(ep);
+		
+		heelCenter = (new DoubleLine(a, n)).getIntersection(new DoubleLine(l, c));
 	}
 	
-	private Line getToeNormalThroughPoint(Line agLine, Point p) {
+	private Line getHeelNormalThroughPoint(Line agLine, Point p) {
 		Point normalVector = new Point(-agLine.getA().y, agLine.getA().x);
 		if (Math.signum(agLine.getA().x) != Math.signum(agLine.getA().y)) {
 			// Linker unterer Eckpunkt
@@ -166,6 +184,17 @@ public abstract class FootPrint {
 		} else {
 			// Linker oberer Eckpunkt
 			return new Line(p.x, p.y, p.x + normalVector.x, p.y + normalVector.y);
+		}
+	}
+	
+	private Line getToeNormalThroughPoint(Line agLine, Point p) {
+		Point normalVector = new Point(-agLine.getA().y, agLine.getA().x);
+		if (Math.signum(agLine.getA().x) != Math.signum(agLine.getA().y)) {
+			// Rechter oberer
+			return new Line(p.x + 1, p.y, p.x + 1 + normalVector.x, p.y + normalVector.y);
+		} else {
+			// Rechter unterer
+			return new Line(p.x + 1, p.y + 1, p.x + 1 + normalVector.x, p.y + 1 + normalVector.y);
 		}
 	}
 	
@@ -280,5 +309,25 @@ public abstract class FootPrint {
 	
 	public DoublePoint getR() {
 	    return r;
+	}
+
+	public DoublePoint getC() {
+		return c;
+	}
+	
+	public DoublePoint getE() {
+		return e;
+	}
+	
+	public DoublePoint getP() {
+	    return p;
+	}
+	
+	public DoublePoint getN() {
+	    return n;
+	}
+	
+	public DoublePoint getHeelCenter() {
+		return heelCenter;
 	}
 }
