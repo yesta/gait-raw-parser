@@ -16,4 +16,8 @@ public class DoublePoint {
 		x = (double) p.x;
 		y = (double) p.y;
 	}
+	
+	public double getLength() {
+		return Math.sqrt(x * x + y * y);
+	}
 }
