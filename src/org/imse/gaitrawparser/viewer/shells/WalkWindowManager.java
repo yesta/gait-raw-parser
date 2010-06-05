@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.imse.gaitrawparser.data.FileParser;
 import org.imse.gaitrawparser.data.PressurePoint;
+import org.imse.gaitrawparser.data.calc.MainCalc;
 import org.imse.gaitrawparser.viewer.controlls.WalkCanvas;
 import org.imse.gaitrawparser.viewer.listeners.ScrollListener;
 
@@ -21,6 +22,7 @@ public class WalkWindowManager {
 	private WalkCanvas canvas;
 	private Shell window;
 	private TimeWindowManager timeWindowManager;
+	private CalcWindowManager calcWindowManager;
 	private boolean walkLoaded = false;
 
 	public WalkWindowManager(Shell aWindow) {
@@ -62,6 +64,9 @@ public class WalkWindowManager {
 			}
 		});
 		
+		final Shell calcWindow = new Shell(window);
+		calcWindowManager = new CalcWindowManager(calcWindow);
+		
 		window.open();
 		window.pack();
 		window.setSize(1000, 400);
@@ -69,7 +74,7 @@ public class WalkWindowManager {
 	
 	private void loadWalk() {
 		String selected = null;
-		//selected = "/Users/matej/Uni/IDP/Raw425.Txt";
+		//selected = "/Users/matej/Uni/IDP/Raw434.Txt";
 		if (selected == null) {
 			FileDialog fd = new FileDialog(window, SWT.OPEN);
 			fd.setText("Open Raw");
@@ -86,6 +91,8 @@ public class WalkWindowManager {
 		window.setSize(size);
 		canvas.setSize(size);*/
 		walkLoaded = true;
+		
+		calcWindowManager.setResult(MainCalc.calculate(FileParser.getFootPrints()));
 	}
 
 }

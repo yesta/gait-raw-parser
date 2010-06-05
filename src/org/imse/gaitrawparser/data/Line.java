@@ -46,61 +46,8 @@ public class Line {
 	}
 
 	public DoublePoint getIntersection(Line agLine) {
-		double[][] matrix = new double[2][3];
-		matrix[0][0] = (double) A.x;
-		matrix[0][1] = (double) -agLine.getA().x;
-		matrix[0][2] = (double) (agLine.getP1().x - p1.x);
-		matrix[1][0] = (double) A.y;
-		matrix[1][1] = (double) -agLine.getA().y;
-		matrix[1][2] = (double) (agLine.getP1().y - p1.y);
-		if(!solveMatrix(matrix)) {
-			return null;
-		}
-		double lambda = matrix[0][2];
-		return new DoublePoint(((double) p1.x) + ((double) A.x) * lambda,
-				((double) p1.y) + ((double) A.y) * lambda);
+		return LineHelper.getIntersection(new DoubleLine(this), new DoubleLine(agLine));
 	}
 	
-	private boolean solveMatrix(double[][] matrix) {
-		if (matrix.length == 0) {
-			throw new RuntimeException("Wrong Matrix.");
-		}
-		int width = matrix[0].length;
-		for (int i = 0; i < matrix.length; i++) {
-			if (width != matrix[i].length) {
-				throw new RuntimeException("Wrong Matrix.");
-			}
-			for (int j = i; i < matrix.length; j++) {
-				if (matrix[j][i] != 0) {
-					double[] temp = matrix[j];
-					matrix[j] = matrix[i];
-					matrix[i] = temp;
-					break;
-				}
-			}
-			for (int j = i + 1; j < matrix.length; j++) {
-				if (matrix[j][i] == 0) {
-					continue;
-				}
-				double factor = -matrix[j][i] / matrix[i][i];
-				matrix[j][i] = 0;
-				for (int k = i + 1; k < width; k++) {
-					matrix[j][k] = matrix[j][k] + matrix[i][k] * factor;
-				}
-			}
-		}
-		for (int i = matrix.length - 1; i >= 0; i--) {
-			if (matrix[i][i] != 0) {
-				matrix[i][width - 1] /= matrix[i][i];
-			}
-			for (int j = i - 1; j >= 0; j--) {
-				if (matrix[j][i] == 0) {
-					continue;
-				}
-				matrix[j][width - 1] += -matrix[j][i] * matrix[i][width - 1];
-				matrix[j][i] = 0;
-			}
-		}
-		return true;
-	}
+	
 }

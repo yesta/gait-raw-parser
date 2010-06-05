@@ -132,6 +132,7 @@ public class FileParser {
 					}
 					footPrints.add(newFoot);
 					newFoot.calculateALRG();
+					newFoot.calculateCNPE();
 				}
 			}
 		}

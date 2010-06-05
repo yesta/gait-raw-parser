@@ -1,5 +1,6 @@
 package org.imse.gaitrawparser.data;
 
+// TODO Eigentlich sollte Line von DoubleLine erben...
 public class DoubleLine {
 
 	private DoublePoint p2;
@@ -15,6 +16,10 @@ public class DoubleLine {
 			this.p2 = p1;
 		}
 		A = new DoublePoint(p2.x - p1.x, p2.y - p1.y);
+	}
+	
+	public DoubleLine(Line line) {
+		this(line.getP1().x, line.getP1().y, line.getP2().x, line.getP2().y);
 	}
 	
 	public DoubleLine(double p1x, double p1y, double p2x, double p2y) {
@@ -37,6 +42,14 @@ public class DoubleLine {
 	public double getXForY(double y) {
 		double lambda = (y - p1.y) / A.y;
 		return p1.x + lambda * A.x;
+	}
+	
+	public DoublePoint getA() {
+		return A;
+	}
+
+	public DoublePoint getIntersection(DoubleLine line) {
+		return LineHelper.getIntersection(this, line);
 	}
 	
 }
