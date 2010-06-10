@@ -17,7 +17,6 @@ public abstract class FootPrint {
 	protected boolean[][] pixel;
 	protected List<Point> takenPoints = new ArrayList<Point>();
 	protected List<PressurePoint> pressurePoints = new ArrayList<PressurePoint>();
-	protected double firstTouchTime;
 	protected List<Point> innerPoints;
 	protected List<Point> outerPoints;
 	protected int lenY;
@@ -38,6 +37,9 @@ public abstract class FootPrint {
 		this.lenX = lenX;
 		this.lenY = lenY;
 		pixel = new boolean[lenX][lenY];
+		
+		firstContact = Double.MAX_VALUE;
+		lastContact = Double.MIN_NORMAL;
 	}
 	
 	public void calculateALRG() {
@@ -178,6 +180,23 @@ public abstract class FootPrint {
 		p = lrLine.getIntersection(ep);
 		
 		heelCenter = (new DoubleLine(a, n)).getIntersection(new DoubleLine(l, c));
+		
+		// Calculate Hell Contact/Toe Off
+		Collections.sort(pressurePoints, new Comparator<PressurePoint>() {
+
+			@Override
+			public int compare(PressurePoint o1, PressurePoint o2) {
+				if (o1.getTime() < o2.getTime()) {
+					return -1;
+				} else if (o1.getTime() > o2.getTime()) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+		});
+		
+		
 	}
 	
 	private Line getHeelNormalThroughPoint(Line agLine, Point p) {
@@ -288,12 +307,19 @@ public abstract class FootPrint {
 			pixel[p.getX()][p.getY()] = true;
 		}
 		pressurePoints.add(p);
-		updateFirstTouchTime(p.getTime());
+		updateFirstContact(p.getTime());
+		updateLastContact(p.getTime());
 	}
 	
-	private void updateFirstTouchTime(double time) {
-		if (time < firstTouchTime) {
-			firstTouchTime = time;
+	private void updateLastContact(double time) {
+		if (time > lastContact) {
+			lastContact = time;
+		}
+	}
+
+	private void updateFirstContact(double time) {
+		if (time < firstContact) {
+			firstContact = time;
 		}
 	}
 	
