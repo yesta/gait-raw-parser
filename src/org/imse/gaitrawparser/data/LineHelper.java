@@ -27,7 +27,7 @@ public class LineHelper {
 			if (width != matrix[i].length) {
 				throw new RuntimeException("Wrong Matrix.");
 			}
-			for (int j = i; i < matrix.length; j++) {
+			for (int j = i; j < matrix.length; j++) {
 				if (matrix[j][i] != 0) {
 					double[] temp = matrix[j];
 					matrix[j] = matrix[i];
