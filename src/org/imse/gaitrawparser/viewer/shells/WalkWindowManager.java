@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.imse.gaitrawparser.data.FileParser;
 import org.imse.gaitrawparser.data.PressurePoint;
-import org.imse.gaitrawparser.data.calc.MainCalc;
+import org.imse.gaitrawparser.data.calculator.MainCalc;
 import org.imse.gaitrawparser.viewer.controlls.WalkCanvas;
 import org.imse.gaitrawparser.viewer.listeners.ScrollListener;
 
