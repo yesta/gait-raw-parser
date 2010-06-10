@@ -22,6 +22,9 @@ public abstract class FootPrint {
 	protected int lenY;
 	protected int lenX;
 
+	private Point heel2Point;
+	private Point toe4Point;
+	
 	private DoublePoint a;
 	private DoublePoint l;
 	private DoublePoint r;
@@ -64,7 +67,7 @@ public abstract class FootPrint {
 						continue;
 					}
 					double diff = Math.abs(getTargetAngleAG() - getAngle(line));
-					if (allPointsOnOneSideOfLine(line) && diff < minDiff) {
+					if (allPointsOnOneSideOfLine(line, takenPoints) && diff < minDiff) {
 						minDiff = diff;
 						agLine = new Line(line.getP1(), line.getP2());
 					}
@@ -94,7 +97,7 @@ public abstract class FootPrint {
                         continue;
                     }
                     double diff = Math.abs(getTargetAngleLR() - getAngle(line));
-                    if (allPointsOnOneSideOfLine(line) && diff < minDiff) {
+                    if (allPointsOnOneSideOfLine(line, takenPoints) && diff < minDiff) {
                         minDiff = diff;
                         lrLine = new Line(line.getP1(), line.getP2());
                     }
@@ -123,7 +126,8 @@ public abstract class FootPrint {
 		
 		for (int i = 0; i < takenPoints.size(); i++) {
 			normal = getHeelNormalThroughPoint(agLine, takenPoints.get(i));
-			if (allPointsOnOneSideOfLine(normal)) {
+			if (allPointsOnOneSideOfLine(normal, takenPoints)) {
+				heel2Point = takenPoints.get(i);
 				break;
 			} else {
 				normal = null;
@@ -135,7 +139,8 @@ public abstract class FootPrint {
 		
 		for (int i = takenPoints.size() - 1; i >= 0; i--) {
 			normal = getToeNormalThroughPoint(agLine, takenPoints.get(i));
-			if (allPointsOnOneSideOfLine(normal)) {
+			if (allPointsOnOneSideOfLine(normal, takenPoints)) {
+				toe4Point = takenPoints.get(i);
 				break;
 			} else {
 				normal = null;
@@ -196,7 +201,35 @@ public abstract class FootPrint {
 			}
 		});
 		
+		for (int i = 0; i < pressurePoints.size(); i++) {
+			if (isPartOfHeel(pressurePoints.get(i).getPoint())) {
+				heelContact = pressurePoints.get(i).getTime();
+				break;
+			}
+		}
 		
+		for (int i = pressurePoints.size() - 1; i >= 0; i--) {
+			if (isPartOfToes(pressurePoints.get(i).getPoint())) {
+				heelContact = pressurePoints.get(i).getTime();
+				break;
+			}
+		}
+	}
+	
+	private boolean isPartOfHeel(Point point) {
+		DoubleLine cnNormal = new DoubleLine(c, n);
+		List<Point> points = new ArrayList<Point>();
+		points.add(point);
+		points.add(heel2Point);
+		return allPointsOnOneSideOfLine(cnNormal, points);
+	}
+	
+	private boolean isPartOfToes(Point point) {
+		DoubleLine epNormal = new DoubleLine(e, p);
+		List<Point> points = new ArrayList<Point>();
+		points.add(point);
+		points.add(toe4Point);
+		return allPointsOnOneSideOfLine(epNormal, points);
 	}
 	
 	private Line getHeelNormalThroughPoint(Line agLine, Point p) {
@@ -229,10 +262,15 @@ public abstract class FootPrint {
 		return Math.atan((l.getP2().y - l.getP1().y) / (l.getP2().x - l.getP1().x));
 	}
 
-	protected boolean allPointsOnOneSideOfLine(Line l) {
+	// TODO Sollte weg, wenn Line eine Subclass von DoubleLine ist
+	protected boolean allPointsOnOneSideOfLine(Line l, List<Point> points) {
+		return allPointsOnOneSideOfLine(new DoubleLine(l), points);
+	}
+	
+	protected boolean allPointsOnOneSideOfLine(DoubleLine l, List<Point> points) {
 		int side = 0;
 		int newSide = 0;
-		for (Point p : takenPoints) {
+		for (Point p : points) {
 			for (int i = 0; i <= 1; i++) {
 				for (int j = 0; j <= 1; j++) {
 					double px = (double) p.x + i;
@@ -359,5 +397,21 @@ public abstract class FootPrint {
 	
 	public DoublePoint getHeelCenter() {
 		return heelCenter;
+	}
+	
+	public double getFirstContact() {
+		return firstContact;
+	}
+	
+	public double getLastContact() {
+		return lastContact;
+	}
+	
+	public double getFirstHeelContact() {
+		return heelContact;
+	}
+	
+	public double getToeOff() {
+		return toeOff;
 	}
 }
