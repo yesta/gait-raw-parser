@@ -20,6 +20,7 @@ public class MainCalc {
 		calculators.add(new AmbulationTimeCalculator());
 		calculators.add(new SwingTimeCalculator());
 		calculators.add(new DoubleSupportCalculator());
+		calculators.add(new SideswingCalculator());
 	}
 	
 	public static List<MetricResult> calculate(List<FootPrint> footPrints) {
