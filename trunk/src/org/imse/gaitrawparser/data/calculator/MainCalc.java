@@ -15,6 +15,7 @@ public class MainCalc {
 		calculators.add(new LastContactCalculator());
 		calculators.add(new StepTimeCalculator());
 		calculators.add(new StrideTimeCalculator());
+		calculators.add(new AmbulationTimeCalculator());
 	}
 	
 	public static List<MetricResult> calculate(List<FootPrint> footPrints) {
