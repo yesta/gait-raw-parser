@@ -18,6 +18,7 @@ public class MainCalc {
 		calculators.add(new StepTimeCalculator());
 		calculators.add(new StrideTimeCalculator());
 		calculators.add(new AmbulationTimeCalculator());
+		calculators.add(new SwingTimeCalculator());
 		calculators.add(new DoubleSupportCalculator());
 	}
 	
