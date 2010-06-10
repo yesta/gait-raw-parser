@@ -9,7 +9,11 @@ import org.eclipse.swt.graphics.Point;
 import org.imse.gaitrawparser.data.PressurePoint.Foot;
 
 public abstract class FootPrint {
-
+    
+    protected double firstContact;
+    protected double lastContact;
+    protected double heelContact;
+    protected double toeOff;
 	protected boolean[][] pixel;
 	protected List<Point> takenPoints = new ArrayList<Point>();
 	protected List<PressurePoint> pressurePoints = new ArrayList<PressurePoint>();
