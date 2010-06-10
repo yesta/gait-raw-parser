@@ -1,12 +1,9 @@
-package org.imse.gaitrawparser.data.calc;
+package org.imse.gaitrawparser.data.calculator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.imse.gaitrawparser.data.FootPrint;
-import org.imse.gaitrawparser.data.metric.MetricCalculator;
-import org.imse.gaitrawparser.data.metric.MetricResult;
-import org.imse.gaitrawparser.data.metric.StepLengthCalculator;
 
 public class MainCalc {
 

@@ -1,4 +1,4 @@
-package org.imse.gaitrawparser.data.metric;
+package org.imse.gaitrawparser.data.calculator;
 
 public class MetricResult {
 	

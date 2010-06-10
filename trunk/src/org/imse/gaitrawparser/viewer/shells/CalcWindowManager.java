@@ -9,9 +9,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Shell;
-import org.imse.gaitrawparser.data.metric.MetricCalculator;
-import org.imse.gaitrawparser.data.metric.MetricResult;
-import org.imse.gaitrawparser.data.metric.PerStepResult;
+import org.imse.gaitrawparser.data.calculator.MetricCalculator;
+import org.imse.gaitrawparser.data.calculator.MetricResult;
+import org.imse.gaitrawparser.data.calculator.PerStepResult;
 
 public class CalcWindowManager {	
 	private Shell window;
