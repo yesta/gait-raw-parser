@@ -414,4 +414,8 @@ public abstract class FootPrint {
 	public double getToeOff() {
 		return toeOff;
 	}
+	
+	public List<PressurePoint> getPressurePoints() {
+		return pressurePoints;
+	}
 }

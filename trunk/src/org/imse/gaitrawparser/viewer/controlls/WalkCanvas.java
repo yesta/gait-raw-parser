@@ -11,9 +11,12 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.imse.gaitrawparser.data.DoubleLine;
+import org.imse.gaitrawparser.data.DoublePoint;
 import org.imse.gaitrawparser.data.FootPrint;
 import org.imse.gaitrawparser.data.PressurePoint;
 import org.imse.gaitrawparser.data.PressurePoint.Foot;
+import org.imse.gaitrawparser.data.calculator.SideswingCalculator;
 
 public class WalkCanvas extends Canvas implements PaintListener {
 
@@ -91,6 +94,11 @@ public class WalkCanvas extends Canvas implements PaintListener {
 		    	gc.drawLine((int) (fp.getHeelCenter().x * scaleD), (int) (fp.getHeelCenter().y * scaleD), (int) (nextFP.getHeelCenter().x * scaleD), (int) (nextFP.getHeelCenter().y * scaleD));
 		    }
 		}
+		DoubleLine axis = (new SideswingCalculator()).calculateMinimalAxis(footPrints);
+		DoublePoint p1 = axis.getP1();
+		DoublePoint p2 = new DoublePoint(axis.getP1().x + axis.getA().x * 400, axis.getP1().y + axis.getA().y * 400);
+		gc.drawLine((int) (p1.x * scaleD), (int) (p1.y * scaleD), (int) (p2.x * scaleD), (int) (p2.y * scaleD));
+		
 	}
 	
 	private Color getColorForPoint(PressurePoint p, Device device) {

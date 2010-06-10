@@ -7,23 +7,46 @@ import org.eclipse.swt.graphics.Point;
 import org.imse.gaitrawparser.data.DoubleLine;
 import org.imse.gaitrawparser.data.DoublePoint;
 import org.imse.gaitrawparser.data.FootPrint;
+import org.imse.gaitrawparser.data.PressurePoint;
 
 public class SideswingCalculator implements MetricCalculator {
-
-	private double maxY = 100;
 	
 	@Override
 	public MetricResult calculate(List<FootPrint> footPrints) {
 	    PerStepResult result = new PerStepResult("SideswingCalculator", "Distance between Walkline and Step, where Walkline is the line, " +
 	    	                                     "where the average of the distance between all steps and the line is minimal. The Sideswing is messured in Sensors");
 	    
+		
+		
+		for(int i = 0; i < footPrints.size(); i++) {
+		   result.setValueForStep(i, getDistanceFromAxis(calculateMinimalAxis(footPrints), footPrints.get(i).getHeelCenter())); 
+		}
+		
+		return result;
+	}
+	
+	public DoubleLine calculateMinimalAxis(List<FootPrint> footPrints) {
 		double minimalAverageSideswing = Double.MAX_VALUE;
 		double averageSideswing = 0;
-		DoubleLine minimalAxis = new DoubleLine(0, 0, 0, 0);
+		DoubleLine minimalAxis = null;
+
+		double maxY = 0;
+		double minY = Double.MAX_VALUE;
+		for (FootPrint f : footPrints) {
+			for (PressurePoint p : f.getPressurePoints()) {
+				if (p.getY() > maxY) {
+					maxY = p.getY();
+				}
+				if (p.getY() < minY) {
+					minY = p.getY();
+				}
+			}
+		}
 		
-		for (double i = 0.0; i <= maxY; i += 0.1) {
-			for (double j = -1.0; j <= 1.0; j += .05) {
-				DoubleLine axis = new DoubleLine(new DoublePoint(0, i), new DoublePoint(1, i + j));
+		for (double start = minY; start <= maxY; start += 0.1) {
+			for (int angle = -45; angle <= 45; angle++) {
+				double y = 5 * Math.tan(((double) angle) * Math.PI / 180.0) + start;
+				DoubleLine axis = new DoubleLine(new DoublePoint(0, start), new DoublePoint(5, y));
 				averageSideswing = computeAverageSideswing(axis, footPrints);
 				if (averageSideswing < minimalAverageSideswing) {
 				    minimalAverageSideswing = averageSideswing;
@@ -31,12 +54,7 @@ public class SideswingCalculator implements MetricCalculator {
 				}
 			}
 		}
-		
-		for(int i = 0; i < footPrints.size(); i++) {
-		   result.setValueForStep(i, getDistanceFromAxis(minimalAxis, footPrints.get(i).getHeelCenter())); 
-		}
-		
-		return result;
+		return minimalAxis;
 	}
 	
 	private double computeAverageSideswing(DoubleLine axis, List <FootPrint> footPrints) {
@@ -50,8 +68,11 @@ public class SideswingCalculator implements MetricCalculator {
 
 
     private double getDistanceFromAxis(DoubleLine axis, DoublePoint point) {
-		DoubleLine axisNormal = new DoubleLine(point, new DoublePoint(point.x + axis.getA().x, point.y + axis.getA().y));
-		return axis.getIntersection(axisNormal).getLength();
+    	DoublePoint axisNormal = new DoublePoint(axis.getA().y, -axis.getA().x);
+		DoubleLine  axisNormalLine = new DoubleLine(point, new DoublePoint(point.x + axisNormal.x, point.y - axisNormal.y));
+		DoublePoint intersection = axis.getIntersection(axisNormalLine);
+		DoublePoint normal = new DoublePoint(intersection.x - point.x, intersection.y - point.y);
+		return normal.getLength();
 	}
 
 }
