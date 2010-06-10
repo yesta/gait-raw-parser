@@ -16,8 +16,8 @@ public class SideswingCalculator implements MetricCalculator {
 		double minimalSideswing = Double.MAX_VALUE;
 		
 		for (double i = 0.0; i <= maxY; i += 0.1) {
-			for (double j = 0.0; j <= 2.0; j += .05) {
-				DoubleLine axis = new DoubleLine(new DoublePoint(0, i), new DoublePoint(1, j));
+			for (double j = -1.0; j <= 1.0; j += .05) {
+				DoubleLine axis = new DoubleLine(new DoublePoint(0, i), new DoublePoint(1, i + j));
 				for (FootPrint f : footPrints) {
 					
 				}
