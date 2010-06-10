@@ -9,7 +9,7 @@ import org.imse.gaitrawparser.data.FootPrint;
 public class StepTimeCalculator implements MetricCalculator {
 
     @Override
-    public MetricResult calculate(List < FootPrint > footPrints){
+    public MetricResult calculate(List <FootPrint> footPrints){
         PerStepResult result = new PerStepResult("Step Time", "See Gatrite Document 4.5");
         
         result.setValueForStep(0, 0);
