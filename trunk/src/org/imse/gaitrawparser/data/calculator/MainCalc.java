@@ -11,6 +11,8 @@ public class MainCalc {
 	
 	static {
 		calculators.add(new StepLengthCalculator());
+		calculators.add(new StepTimeCalculator());
+		calculators.add(new StrideTimeCalculator());
 	}
 	
 	public static List<MetricResult> calculate(List<FootPrint> footPrints) {
