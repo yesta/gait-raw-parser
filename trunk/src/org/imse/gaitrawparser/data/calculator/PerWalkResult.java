@@ -17,6 +17,6 @@ public class PerWalkResult extends MetricResult {
     }
     
     public String toString() {
-        return "Caculator: " + getName() + ", Description: " + getDescription() + "\n" + "Value per Walk: " + value;
+        return "Caculator: " + getName() + ", Description: " + getDescription() + "\n" + "\tValue per Walk: " + value + "\n";
     }
 }
