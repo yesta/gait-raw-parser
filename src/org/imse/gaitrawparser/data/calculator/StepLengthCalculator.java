@@ -26,10 +26,10 @@ public class StepLengthCalculator implements MetricCalculator {
 			if ((new DoublePoint(alVector.x + agVector.x, alVector.y + agVector.y)).getLength() < agVector.getLength()) {
 				alLength *= -1;
 			}
-			result.setValueForStep(i + 1, alLength);
+			result.setValueForStep(i, alLength);
 		}
 
-		result.setValueForStep(footPrints.size() - 1, 0);
+		result.setValueForStep(footPrints.size() - 2, 0);
 		
 		return result;
 	}
