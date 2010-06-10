@@ -8,13 +8,11 @@ public class StrideTimeCalculator implements MetricCalculator {
 
     public MetricResult calculate(List < FootPrint > footPrints) {
         PerStepResult result = new PerStepResult("Stride Time", "See Gatrite Document 4.6");
-        
-        result.setValueForStep(0, 0);
-        result.setValueForStep(1, 0);
 
-        for (int i = 2; i < footPrints.size(); i++){
-            result.setValueForStep(i, footPrints.get(i).getFirstContact() - footPrints.get(i - 2).getFirstContact());
+        for (int i = 0; i < footPrints.size() - 2; i++){
+            result.setValueForStep(i, footPrints.get(i + 2).getFirstContact() - footPrints.get(i).getFirstContact());
         }
+        result.setValueForStep(footPrints.size() - 2, 0);
         return result;
     }
 
