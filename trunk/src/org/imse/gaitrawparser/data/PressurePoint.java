@@ -1,5 +1,7 @@
 package org.imse.gaitrawparser.data;
 
+import org.eclipse.swt.graphics.Point;
+
 public class PressurePoint {
 	public enum Foot {
 		Right, Left
@@ -68,6 +70,10 @@ public class PressurePoint {
 
 	public double getTime() {
 		return time;
+	}
+	
+	public Point getPoint() {
+		return new Point(x, y);
 	}
 
 }
