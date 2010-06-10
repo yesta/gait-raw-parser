@@ -14,8 +14,8 @@ public class SideswingCalculator implements MetricCalculator {
 	
 	@Override
 	public MetricResult calculate(List<FootPrint> footPrints) {
-	    PerStepResult result = new PerStepResult("SideswingCalculator", "Difference between Walkline and Step, where Walkline is the line, " +
-	    	                                     "where the average of the difference between all steps and the line is minimal. The Sideswing is messured in Sensors");
+	    PerStepResult result = new PerStepResult("SideswingCalculator", "Distance between Walkline and Step, where Walkline is the line, " +
+	    	                                     "where the average of the distance between all steps and the line is minimal. The Sideswing is messured in Sensors");
 	    
 		double minimalAverageSideswing = Double.MAX_VALUE;
 		double averageSideswing = 0;
