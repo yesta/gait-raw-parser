@@ -12,7 +12,9 @@ public class MainCalc {
 	static {
 		calculators.add(new StepLengthCalculator());
 		calculators.add(new FirstContactCalculator());
+		calculators.add(new FirstHeelContactCalculator());
 		calculators.add(new LastContactCalculator());
+		calculators.add(new ToeOffCalculator());
 		calculators.add(new StepTimeCalculator());
 		calculators.add(new StrideTimeCalculator());
 		calculators.add(new AmbulationTimeCalculator());
