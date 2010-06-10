@@ -210,7 +210,7 @@ public abstract class FootPrint {
 		
 		for (int i = pressurePoints.size() - 1; i >= 0; i--) {
 			if (isPartOfToes(pressurePoints.get(i).getPoint())) {
-				heelContact = pressurePoints.get(i).getTime();
+				toeOff = pressurePoints.get(i).getTime();
 				break;
 			}
 		}
