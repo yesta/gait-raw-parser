@@ -11,9 +11,9 @@ public class StepLengthCalculator implements MetricCalculator {
 
 	@Override
 	public PerStepResult calculate(List<FootPrint> footPrints) {
-		PerStepResult result = new PerStepResult("Step Length", "See Gatrite Document 3.4");
+		PerStepResult result = new PerStepResult(footPrints, "Step Length", "See Gatrite Document 3.4");
 		
-		result.setValueForStep(0, 0);
+		result.setValueForStep(0, null);
 		
 		for (int i = 0; i < footPrints.size() - 2; i++) {
 			DoubleLine agLine = new DoubleLine(footPrints.get(i).getHeelCenter(), footPrints.get(i + 2).getHeelCenter());
@@ -29,7 +29,8 @@ public class StepLengthCalculator implements MetricCalculator {
 			result.setValueForStep(i, alLength);
 		}
 
-		result.setValueForStep(footPrints.size() - 2, 0);
+		result.setValueForStep(footPrints.size() - 2, null);
+		result.setValueForStep(footPrints.size() - 1, null);
 		
 		return result;
 	}

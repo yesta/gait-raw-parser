@@ -76,7 +76,7 @@ public class WalkWindowManager {
 
 		String selected = null;
 
-	    //selected = "/Users/matej/Uni/IDP/Raw397.Txt";
+	    selected = "/Users/matej/Uni/IDP/Raw345.Txt";
 
 
 		if (selected == null) {

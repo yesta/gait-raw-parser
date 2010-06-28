@@ -1,5 +1,6 @@
 package org.imse.gaitrawparser.viewer.shells;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -9,6 +10,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Shell;
+import org.imse.gaitrawparser.data.calculator.PerGaiteCycleResult;
 import org.imse.gaitrawparser.data.calculator.MetricCalculator;
 import org.imse.gaitrawparser.data.calculator.MetricResult;
 import org.imse.gaitrawparser.data.calculator.PerStepResult;
@@ -36,10 +38,42 @@ public class CalcWindowManager {
 	}
 	
 	public void setResult(List<MetricResult> results) {
-		StringBuffer b = new StringBuffer();
+		List<PerGaiteCycleResult> gaitRes = new ArrayList<PerGaiteCycleResult>();
+		List<PerStepResult> stepRes = new ArrayList<PerStepResult>();
+		List<MetricResult> otherRes = new ArrayList<MetricResult>();
 		for (MetricResult r : results) {
-			b.append(r.toString() + "\n");
+			if (r instanceof PerGaiteCycleResult) {
+				gaitRes.add((PerGaiteCycleResult) r);
+			/*} else if (r instanceof PerStepResult) {
+				stepRes.add((PerStepResult) r);*/
+			} else {
+				otherRes.add(r);
+			}
 		}
-		styledText.setText(b.toString());
+		StringBuffer buff = new StringBuffer();
+		
+		if (gaitRes.size() > 0) {
+			buff.append("Gait Cycle Values:\n\n");
+			int stepCount = gaitRes.get(0).getCyclesCount();
+			for (int i = 0; i < stepCount; i++) {
+				buff.append("\tCycle that starts with Step: " + i + ", " + gaitRes.get(0).getFootForStep(i) + "\n");
+				for (PerGaiteCycleResult g : gaitRes) {
+					buff.append("\t\t" + g.getName() + "\n\t\t\tAbs: " + g.getAbsValueForStep(i) + "\n\t\t\tRel: " + g.getRelValueForStep(i) + "\n");
+				}
+			}
+			buff.append("\tAvgs:\n");
+			for (PerGaiteCycleResult g : gaitRes) {
+				buff.append("\t\t" + g.getName() + "\n\t\t\tAbs:" + g.getAvgAbs() + "\n\t\t\tRel:" + g.getAvgRel() + "\n");
+			}
+		}
+		if (stepRes.size() > 0) {
+			// TODO
+		}
+		
+		for (MetricResult m : otherRes) {
+			buff.append("\n" + m.toString());
+		}
+		
+		styledText.setText(buff.toString());
 	}
 }

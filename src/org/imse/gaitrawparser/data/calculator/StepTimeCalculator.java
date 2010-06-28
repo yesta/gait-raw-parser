@@ -10,11 +10,12 @@ public class StepTimeCalculator implements MetricCalculator {
 
     @Override
     public MetricResult calculate(List <FootPrint> footPrints){
-        PerStepResult result = new PerStepResult("Step Time", "See Gatrite Document 4.5");
+        PerStepResult result = new PerStepResult(footPrints, "Step Time", "See Gatrite Document 4.5");
         
         for (int i = 0; i < footPrints.size() - 1; i++) {
             result.setValueForStep(i, footPrints.get(i+1).getFirstContact() - footPrints.get(i).getFirstContact());
         }
+        result.setValueForStep(footPrints.size() - 1, null);
         
         return result;
     }

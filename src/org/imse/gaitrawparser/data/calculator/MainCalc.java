@@ -10,17 +10,13 @@ public class MainCalc {
 	private static List<MetricCalculator> calculators = new ArrayList<MetricCalculator>();
 	
 	static {
-		calculators.add(new StepLengthCalculator());
-		calculators.add(new FirstContactCalculator());
-		calculators.add(new FirstHeelContactCalculator());
-		calculators.add(new LastContactCalculator());
-		calculators.add(new ToeOffCalculator());
-		calculators.add(new StepTimeCalculator());
-		calculators.add(new StrideTimeCalculator());
 		calculators.add(new AmbulationTimeCalculator());
-		calculators.add(new SwingTimeCalculator());
-		calculators.add(new DoubleSupportCalculator());
-		calculators.add(new SideswingCalculator());
+		calculators.add(new StepLengthCalculator());
+		calculators.add(new StepTimeCalculator());
+		calculators.add(new CycleTimeCalculator());
+		calculators.add(new SingleSupportCalculator());
+		calculators.add(new StanceCalculator());
+		calculators.add(new SwingCalculator());
 	}
 	
 	public static List<MetricResult> calculate(List<FootPrint> footPrints) {
