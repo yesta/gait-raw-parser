@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.imse.gaitrawparser.data.FootPrint;
 
-public class DoubleSupportCalculator implements MetricCalculator {
+public class SingleSupportCalculator implements MetricCalculator {
 
 	@Override
 	public MetricResult calculate(List<FootPrint> footPrints) {
-		
-		PerGaiteCycleResult r = new PerGaiteCycleResult(footPrints, "Double Support", "");
+		PerGaiteCycleResult r = new PerGaiteCycleResult(footPrints, "Single Support", "");
 		
 		PerGaiteCycleResult timeResult = (PerGaiteCycleResult) (new CycleTimeCalculator()).calculate(footPrints);
 		
@@ -18,22 +17,12 @@ public class DoubleSupportCalculator implements MetricCalculator {
 				r.setValueForCycle(i, null, null);
 				continue;
 			}
-			double ds1 = footPrints.get(i - 1).getLastContact() - footPrints.get(i).getFirstContact();
-			double ds2 = footPrints.get(i).getLastContact() - footPrints.get(i + 1).getFirstContact();
 
-			Double ds = ds1 + ds2;
-			
+			double val = footPrints.get(i + 1).getFirstContact() - footPrints.get(i - 1).getLastContact();
 			Double cTime = timeResult.getAbsValueForStep(i);
-			
-			if (cTime != null) {
-				r.setValueForCycle(i, ds, ds / cTime);
-			} else {
-				r.setValueForCycle(i, ds, null);
-			}
+			r.setValueForCycle(i, val, (cTime == null ? null : val / cTime));
 		}
-		
 		return r;
-		
 	}
 
 }

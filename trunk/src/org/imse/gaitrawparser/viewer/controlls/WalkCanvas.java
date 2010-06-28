@@ -23,7 +23,7 @@ public class WalkCanvas extends Canvas implements PaintListener {
 	private List<PressurePoint> points;
 	private int width;
 	private int height;
-	private int scale = 5;
+	private int scale = 4;
 	private Color[] colors;
 	private int stepsCount = 0;
 	private int lenX;
