@@ -64,6 +64,7 @@ public class CalcWindowManager {
 			buff.append("\tAvgs:\n");
 			for (PerGaiteCycleResult g : gaitRes) {
 				buff.append("\t\t" + g.getName() + "\n\t\t\tAbs:" + g.getAvgAbs() + "\n\t\t\tRel:" + g.getAvgRel() + "\n");
+				buff.append("\n\t\tAvg Rel Left: " + g.getAvgRelLeft() + "\n\t\tAvg Rel Right: " + g.getAvgRelRight() + "\n");
 			}
 		}
 		if (stepRes.size() > 0) {
