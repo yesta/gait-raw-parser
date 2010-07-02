@@ -77,6 +77,38 @@ public class PerGaiteCycleResult extends MetricResult {
 		}
 	}
 	
+	public Double getAvgRelLeft() {
+	    double avg = 0.0;
+        double avgCount = 0.0;
+        for (int i = 0; i < cycleCount; i++) {
+            if (getAbsValueForStep(i) != null && prints.get(i).getPressurePoints().get(0).getFoot().equals(Foot.Left)) {
+                avg += getAbsValueForStep(i);
+                avgCount++;
+            }
+        }
+        if (avgCount > 0) {
+            return avg / avgCount;
+        } else {
+            return null;
+        }
+	}
+	
+	public Double getAvgRelRight() {
+	    double avg = 0.0;
+        double avgCount = 0.0;
+        for (int i = 0; i < cycleCount; i++) {
+            if (getAbsValueForStep(i) != null && prints.get(i).getPressurePoints().get(0).getFoot().equals(Foot.Right)) {
+                avg += getAbsValueForStep(i);
+                avgCount++;
+            }
+        }
+        if (avgCount > 0) {
+            return avg / avgCount;
+        } else {
+            return null;
+        }
+	}
+	
 	@Override
 	public String toString() {
 		StringBuffer b = new StringBuffer("Gait Caculator: " + getName() + ", Description: " + getDescription() + "\n");
@@ -84,6 +116,8 @@ public class PerGaiteCycleResult extends MetricResult {
 			b.append("\tCycle with start foot " + i + ", " + prints.get(i).getFoot() + "\n\t\tAbs:" + getAbsValueForStep(i) + "\n\t\tRel:" + getRelValueForStep(i) + "\n");
 		}
 		b.append("\tAvg:\n\t\tRel:" + getAvgRel() + "\n\t\tAbs:" + getAvgAbs() + "\n");
+		b.append("\tAvg - Rel - Left:" + getAvgRelLeft());
+		b.append("\tAvg - Rel - Right:" + getAvgRelRight());
 		return b.toString();
 	}
 

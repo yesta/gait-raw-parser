@@ -17,6 +17,7 @@ public class MainCalc {
 		calculators.add(new SingleSupportCalculator());
 		calculators.add(new StanceCalculator());
 		calculators.add(new SwingCalculator());
+		calculators.add(new DoubleSupportCalculator());
 	}
 	
 	public static List<MetricResult> calculate(List<FootPrint> footPrints) {

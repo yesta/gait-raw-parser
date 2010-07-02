@@ -50,6 +50,30 @@ public class PerStepResult extends MetricResult {
 		return avg / avgCount;
 	}
 	
+	public double getAvgLeft() {
+	    double avg = 0.0;
+        double avgCount = 0.0;
+        for (int i = 0; i < stepCount; i++) {
+            if (getValueForStep(i) != null && prints.get(i).getPressurePoints().get(0).getFoot().equals(Foot.Left)) {
+                avg += getValueForStep(i);
+                avgCount++;
+            }
+        }
+        return avg / avgCount;
+	}
+	
+	public double getAvgRight() {
+	    double avg = 0.0;
+        double avgCount = 0.0;
+        for (int i = 0; i < stepCount; i++) {
+            if (getValueForStep(i) != null && prints.get(i).getPressurePoints().get(0).getFoot().equals(Foot.Right)) {
+                avg += getValueForStep(i);
+                avgCount++;
+            }
+        }
+        return avg / avgCount;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuffer b = new StringBuffer("Caculator: " + getName() + ", Description: " + getDescription() + "\n");
@@ -57,6 +81,8 @@ public class PerStepResult extends MetricResult {
 			b.append("\tStep that starts with foot " + i + ", " + prints.get(i).getFoot() + "\n\t\t" + getValueForStep(i) + "\n");
 		}
 		b.append("\tAvg:\n\t\t" + getAvg());
+		b.append("\n\tAvg Left:\n\t\t" + getAvgLeft());
+		b.append("\n\tAvg Right:\n\t\t" + getAvgRight());
 		return b.toString();
 	}
 	
