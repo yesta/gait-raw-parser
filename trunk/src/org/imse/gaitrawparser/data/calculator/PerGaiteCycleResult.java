@@ -15,22 +15,29 @@ public class PerGaiteCycleResult extends MetricResult {
 		new HashMap<Integer, Double>();
 	private int cycleCount = -1;
 	private List<FootPrint> prints;
+	private Map<Integer, Double> cycleTimes;
 	
 	public PerGaiteCycleResult(List<FootPrint> prints, String name, String description) {
 		super(name, description);
 		this.prints = prints;
+		// TODO Die Berechnung hier sollte gecachet werden...
+		cycleTimes = CycleTimeCalculator.getCycleTimesForFootPrints(prints);
 	}
 	
 	public int getCyclesCount() {
 		return cycleCount;
 	}
 	
-	public void setValueForCycle(int cycleStartFootIndex, Double absValue, Double relValue) {
+	public void setValueForCycle(int cycleStartFootIndex, Double absValue) {
 		if (cycleCount < cycleStartFootIndex + 1) {
 			cycleCount  = cycleStartFootIndex + 1;
 		}
 		absValues.put(cycleStartFootIndex, absValue);
-		relValues.put(cycleStartFootIndex, relValue);
+		if (cycleTimes.get(cycleStartFootIndex) == null || absValue == null) {
+			relValues.put(cycleStartFootIndex, null);
+		} else {
+			relValues.put(cycleStartFootIndex, absValue / cycleTimes.get(cycleStartFootIndex));
+		}
 	}
 	
 	public Double getAbsValueForStep(int index) {
@@ -45,68 +52,39 @@ public class PerGaiteCycleResult extends MetricResult {
 		return prints.get(index).getFoot();
 	}
 	
-	public Double getAvgRel() {
+	private Double getAvg(Map<Integer, Double> values, Foot onlyForFoot) {
 		double avg = 0.0;
 		double avgCount = 0.0;
 		for (int i = 0; i < cycleCount; i++) {
-			if (getRelValueForStep(i) != null) {
-				avg += getRelValueForStep(i);
-				avgCount++;
-			}
+		    if (values.get(i) != null) {
+		    	if (onlyForFoot != null && !prints.get(i).getFoot().equals(onlyForFoot)) {
+		    		continue;
+		    	}
+		        avg += values.get(i);
+		        avgCount++;
+		    }
 		}
 		if (avgCount > 0) {
-			return avg / avgCount;
+		    return avg / avgCount;
 		} else {
-			return null;
+		    return null;
 		}
+	}
+	
+	public Double getAvgRel() {
+		return getAvg(relValues, null);
 	}
 	
 	public Double getAvgAbs() {
-		double avg = 0.0;
-		double avgCount = 0.0;
-		for (int i = 0; i < cycleCount; i++) {
-			if (getAbsValueForStep(i) != null) {
-				avg += getAbsValueForStep(i);
-				avgCount++;
-			}
-		}
-		if (avgCount > 0) {
-			return avg / avgCount;
-		} else {
-			return null;
-		}
+		return getAvg(absValues, null);
 	}
 	
-	public Double getAvgRelLeft() {
-	    double avg = 0.0;
-        double avgCount = 0.0;
-        for (int i = 0; i < cycleCount; i++) {
-            if (getAbsValueForStep(i) != null && prints.get(i).getPressurePoints().get(0).getFoot().equals(Foot.Left)) {
-                avg += getAbsValueForStep(i);
-                avgCount++;
-            }
-        }
-        if (avgCount > 0) {
-            return avg / avgCount;
-        } else {
-            return null;
-        }
+	public Double getAvgRel(Foot foot) {
+		return getAvg(relValues, foot);
 	}
 	
-	public Double getAvgRelRight() {
-	    double avg = 0.0;
-        double avgCount = 0.0;
-        for (int i = 0; i < cycleCount; i++) {
-            if (getAbsValueForStep(i) != null && prints.get(i).getPressurePoints().get(0).getFoot().equals(Foot.Right)) {
-                avg += getAbsValueForStep(i);
-                avgCount++;
-            }
-        }
-        if (avgCount > 0) {
-            return avg / avgCount;
-        } else {
-            return null;
-        }
+	public Double getAvgAbs(Foot foot) {
+		return getAvg(absValues, foot);
 	}
 	
 	@Override
@@ -116,8 +94,6 @@ public class PerGaiteCycleResult extends MetricResult {
 			b.append("\tCycle with start foot " + i + ", " + prints.get(i).getFoot() + "\n\t\tAbs:" + getAbsValueForStep(i) + "\n\t\tRel:" + getRelValueForStep(i) + "\n");
 		}
 		b.append("\tAvg:\n\t\tRel:" + getAvgRel() + "\n\t\tAbs:" + getAvgAbs() + "\n");
-		b.append("\tAvg - Rel - Left:" + getAvgRelLeft());
-		b.append("\tAvg - Rel - Right:" + getAvgRelRight());
 		return b.toString();
 	}
 

@@ -38,40 +38,35 @@ public class PerStepResult extends MetricResult {
 		return prints.get(index).getFoot();
 	}
 	
-	public double getAvg() {
+	public Double getAvg(Foot foot) {
 		double avg = 0.0;
 		double avgCount = 0.0;
 		for (int i = 0; i < stepCount; i++) {
 			if (getValueForStep(i) != null) {
+				if (foot != null && !prints.get(i).getFoot().equals(foot)) {
+					continue;
+				}
 				avg += getValueForStep(i);
 				avgCount++;
 			}
 		}
-		return avg / avgCount;
+		if (avgCount > 0) {
+			return avg / avgCount;
+		} else {
+			return null;
+		}
 	}
 	
-	public double getAvgLeft() {
-	    double avg = 0.0;
-        double avgCount = 0.0;
-        for (int i = 0; i < stepCount; i++) {
-            if (getValueForStep(i) != null && prints.get(i).getPressurePoints().get(0).getFoot().equals(Foot.Left)) {
-                avg += getValueForStep(i);
-                avgCount++;
-            }
-        }
-        return avg / avgCount;
+	public Double getAvg() {
+		return getAvg(null);
 	}
 	
-	public double getAvgRight() {
-	    double avg = 0.0;
-        double avgCount = 0.0;
-        for (int i = 0; i < stepCount; i++) {
-            if (getValueForStep(i) != null && prints.get(i).getPressurePoints().get(0).getFoot().equals(Foot.Right)) {
-                avg += getValueForStep(i);
-                avgCount++;
-            }
-        }
-        return avg / avgCount;
+	public Double getAvgLeft() {
+	    return getAvg(Foot.Left);
+	}
+	
+	public Double getAvgRight() {
+	    return getAvg(Foot.Right);
 	}
 	
 	@Override
