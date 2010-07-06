@@ -26,7 +26,7 @@ public class StepLengthCalculator implements MetricCalculator {
 			if ((new DoublePoint(alVector.x + agVector.x, alVector.y + agVector.y)).getLength() < agVector.getLength()) {
 				alLength *= -1;
 			}
-			result.setValueForStep(i, alLength);
+			result.setValueForStep(i, SensorToDistanceConverter.convertSensorUnitToCentimeters(alLength));
 		}
 
 		result.setValueForStep(footPrints.size() - 2, null);

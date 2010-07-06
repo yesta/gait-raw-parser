@@ -19,7 +19,8 @@ public class SideswingCalculator implements MetricCalculator {
 		
 		
 		for(int i = 0; i < footPrints.size(); i++) {
-		   result.setValueForStep(i, getDistanceFromAxis(calculateMinimalAxis(footPrints), footPrints.get(i).getHeelCenter())); 
+		   double value = getDistanceFromAxis(calculateMinimalAxis(footPrints), footPrints.get(i).getHeelCenter());
+		   result.setValueForStep(i, SensorToDistanceConverter.convertSensorUnitToCentimeters(value)); 
 		}
 		
 		return result;

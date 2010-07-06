@@ -88,7 +88,7 @@ public class FileParser {
 		lenX = lenX + 20;
 		lenY = lenY + 20;
 		
-		PressurePoint[][] mat = new PressurePoint[lenX][lenY];
+		List<?>[][] mat = new ArrayList<?>[lenX][lenY];
 		for (PressurePoint p : points) {
 			if (rotate) {
 				p.setX(oldLenX - 1 - p.getX());
@@ -97,7 +97,10 @@ public class FileParser {
 			p.setX(p.getX() + 15);
 			p.setY(p.getY() + 15);
 			if (p.isPartOfFoot()) {
-				mat[p.getX()][p.getY()] = p;
+				if (mat[p.getX()][p.getY()] == null) {
+					mat[p.getX()][p.getY()] = new ArrayList<PressurePoint>();
+				}
+				((List<PressurePoint>) mat[p.getX()][p.getY()]).add(p);
 			}
 		}
 		footPrints = new ArrayList<FootPrint>();
@@ -105,14 +108,15 @@ public class FileParser {
 			for (int y = 0; y < lenY; y++) {
 				if (mat[x][y] != null) {
 					FootPrint newFoot;
-					if (mat[x][y].getFoot() == Foot.Left) {
+					List<PressurePoint> l = ((List<PressurePoint>) mat[x][y]);
+					if (l.get(0).getFoot() == Foot.Left) {
 						newFoot = new LeftFootPrint(lenX, lenY);
 					} else {
 						newFoot = new RightFootPrint(lenX, lenY);
 					}
 					// Breitensuche starten
 					List<PressurePoint> q = new ArrayList<PressurePoint>();
-					q.add(mat[x][y]);
+					q.addAll(l);
 					mat[x][y] = null;
 					for (int i = 0; i < q.size(); i++) {
 						PressurePoint p = q.get(i);
@@ -123,7 +127,8 @@ public class FileParser {
 										&& p.getY() + k >= 0
 										&& p.getY() + k < lenY) {
 									if (mat[p.getX() + j][p.getY() + k] != null) {
-										q.add(mat[p.getX() + j][p.getY() + k]);
+										l = ((List<PressurePoint>) mat[p.getX() + j][p.getY() + k]);
+										q.addAll(l);
 										mat[p.getX() + j][p.getY() + k] = null;
 									}
 								}

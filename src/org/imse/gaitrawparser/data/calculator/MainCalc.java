@@ -11,9 +11,9 @@ public class MainCalc {
 	
 	static {
 		calculators.add(new AmbulationTimeCalculator());
-		calculators.add(new StepLengthCalculator());
 		calculators.add(new StepTimeCalculator());
 		calculators.add(new CycleTimeCalculator());
+		calculators.add(new StepLengthCalculator());
 		calculators.add(new SingleSupportCalculator());
 		calculators.add(new StanceCalculator());
 		calculators.add(new SwingCalculator());

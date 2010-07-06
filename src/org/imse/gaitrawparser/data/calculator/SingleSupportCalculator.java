@@ -10,17 +10,14 @@ public class SingleSupportCalculator implements MetricCalculator {
 	public MetricResult calculate(List<FootPrint> footPrints) {
 		PerGaiteCycleResult r = new PerGaiteCycleResult(footPrints, "Single Support", "");
 		
-		PerGaiteCycleResult timeResult = (PerGaiteCycleResult) (new CycleTimeCalculator()).calculate(footPrints);
 		
 		for (int i = 0; i < footPrints.size(); i++) {
 			if (i == 0 || i == footPrints.size() - 1) {
-				r.setValueForCycle(i, null, null);
+				r.setValueForCycle(i, null);
 				continue;
 			}
 
-			double val = footPrints.get(i + 1).getFirstContact() - footPrints.get(i - 1).getLastContact();
-			Double cTime = timeResult.getAbsValueForStep(i);
-			r.setValueForCycle(i, val, (cTime == null ? null : val / cTime));
+			r.setValueForCycle(i, footPrints.get(i + 1).getFirstContact() - footPrints.get(i - 1).getLastContact());
 		}
 		return r;
 	}

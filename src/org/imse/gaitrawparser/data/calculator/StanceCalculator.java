@@ -13,9 +13,7 @@ public class StanceCalculator implements MetricCalculator {
 		PerGaiteCycleResult timeResult = (PerGaiteCycleResult) (new CycleTimeCalculator()).calculate(footPrints);
 		
 		for (int i = 0; i < footPrints.size(); i++) {
-			double val = footPrints.get(i).getLastContact() - footPrints.get(i).getFirstContact();
-			Double cTime = timeResult.getAbsValueForStep(i);
-			r.setValueForCycle(i, val, (cTime == null ? null : val / cTime));
+			r.setValueForCycle(i, footPrints.get(i).getLastContact() - footPrints.get(i).getFirstContact());
 		}
 		return r;
 	}

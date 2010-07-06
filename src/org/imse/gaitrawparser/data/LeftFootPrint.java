@@ -17,6 +17,11 @@ public class LeftFootPrint extends FootPrint {
 
 	@Override
 	protected Line getInnerLine(Point p1, Point p2) {
+		if (p1.x > p2.x) {
+			Point temp = p1;
+			p1 = p2;
+			p2 = temp;
+		}
 		if (p1.y > p2.y) {
 			return new Line(p1.x + 1, p1.y + 1, p2.x + 1, p2.y + 1);
 		} else {
@@ -34,8 +39,8 @@ public class LeftFootPrint extends FootPrint {
 	}
 
 	@Override
-	protected double getTargetAngleAG() {
-		return -0.1;
+	protected Point getTargetDirectionAG() {
+		return new Point(10, -1);
 	}
 
     @Override
@@ -49,6 +54,11 @@ public class LeftFootPrint extends FootPrint {
 
     @Override
     protected Line getOuterLine(Point p1, Point p2) {
+		if (p1.x > p2.x) {
+			Point temp = p1;
+			p1 = p2;
+			p2 = temp;
+		}
         if(p1.y > p2.y){
             return new Line(p1.x, p1.y, p2.x, p2.y);
         } else {
@@ -57,8 +67,8 @@ public class LeftFootPrint extends FootPrint {
     }
 
     @Override
-    protected double getTargetAngleLR() {
-        return -0.1;
+    protected Point getTargetDirectionLR() {
+		return new Point(10, -2);
     }
 
 
