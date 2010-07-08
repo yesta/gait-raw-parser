@@ -68,7 +68,7 @@ public class LeftFootPrint extends FootPrint {
 
     @Override
     protected Point getTargetDirectionLR() {
-		return new Point(10, -2);
+		return new Point(10, -3);
     }
 
 
