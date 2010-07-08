@@ -12,6 +12,10 @@ public abstract class FootPrint {
 
 	protected double heelContact;
 	protected double toeOff;
+	
+	protected double firstContact;
+	protected double lastContact;
+	
 	protected boolean[][] pixel;
 	protected List<Point> takenPoints = new ArrayList<Point>();
 	protected List<PressurePoint> pressurePoints = new ArrayList<PressurePoint>();
@@ -35,6 +39,9 @@ public abstract class FootPrint {
 	private DoublePoint heelCenter;
 
 	public FootPrint(int lenX, int lenY) {
+	    firstContact = Double.MAX_VALUE;
+	    lastContact = Double.MIN_VALUE;
+	    
 		this.lenX = lenX;
 		this.lenY = lenY;
 		pixel = new boolean[lenX][lenY];
@@ -357,6 +364,12 @@ public abstract class FootPrint {
 			pixel[p.getX()][p.getY()] = true;
 		}
 		pressurePoints.add(p);
+        if (p.getTime() < firstContact) {
+            firstContact = p.getTime();
+        }
+        if (p.getTime() > lastContact) {
+            lastContact = p.getTime();
+        }
 	}
 
 	public abstract Foot getFoot();
@@ -398,11 +411,13 @@ public abstract class FootPrint {
 	}
 
 	public double getFirstContact() {
-		return heelContact;
+		//return heelContact;
+	    return firstContact;
 	}
 
 	public double getLastContact() {
-		return toeOff;
+		//return toeOff;
+		return lastContact;
 	}
 
 	public List<PressurePoint> getPressurePoints() {
