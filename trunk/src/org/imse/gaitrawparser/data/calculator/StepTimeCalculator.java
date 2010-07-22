@@ -20,7 +20,7 @@ public class StepTimeCalculator implements MetricCalculator {
 
 			r.setValueForCycle(i, footPrints.get(i + 2).getFirstContact() - footPrints.get(i + 1).getFirstContact());
         }
-        
+        r.setUnit("sec");
         return r;
     }
 

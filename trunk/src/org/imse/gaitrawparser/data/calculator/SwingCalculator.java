@@ -17,6 +17,7 @@ public class SwingCalculator implements MetricCalculator {
 			}
 			r.setValueForCycle(i, footPrints.get(i + 2).getFirstContact() - footPrints.get(i).getLastContact());
 		}
+		r.setUnit("sec");
 		return r;
 	}
 

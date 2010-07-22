@@ -15,7 +15,7 @@ public class CycleTimeCalculator implements MetricCalculator{
 		for (int i = 0; i < footPrints.size(); i++) {
 			r.setValueForCycle(i, resultMap.get(i));
 		}
-		
+		r.setUnit("sec");
 		return r;
 	}
 	

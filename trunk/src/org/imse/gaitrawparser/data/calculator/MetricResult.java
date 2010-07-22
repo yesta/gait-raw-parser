@@ -4,6 +4,7 @@ public class MetricResult {
 	
 	private String description;
 	private String name;
+	private String unit;
 	
 	public MetricResult(String name, String description) {
 		this.name = name;
@@ -16,6 +17,14 @@ public class MetricResult {
 	
 	public String getDescription() {
 		return description;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getUnit() {
+		return unit;
 	}
 	
 }
