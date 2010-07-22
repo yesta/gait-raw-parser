@@ -19,6 +19,7 @@ public class SingleSupportCalculator implements MetricCalculator {
 
 			r.setValueForCycle(i, footPrints.get(i + 1).getFirstContact() - footPrints.get(i - 1).getLastContact());
 		}
+		r.setUnit("sec");
 		return r;
 	}
 

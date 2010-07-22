@@ -24,6 +24,7 @@ public class DoubleSupportCalculator implements MetricCalculator {
 			r.setValueForCycle(i, ds1 + ds2);
 		}
 		
+		r.setUnit("sec");
 		return r;
 		
 	}

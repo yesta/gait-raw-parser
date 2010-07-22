@@ -79,4 +79,8 @@ public class CalcWindowManager {
 		
 		styledText.setText(buff.toString());
 	}
+	
+	public void setText(String text) {
+		styledText.setText(text);
+	}
 }

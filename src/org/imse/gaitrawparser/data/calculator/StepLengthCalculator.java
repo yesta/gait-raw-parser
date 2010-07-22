@@ -31,7 +31,7 @@ public class StepLengthCalculator implements MetricCalculator {
 
 		result.setValueForStep(footPrints.size() - 2, null);
 		result.setValueForStep(footPrints.size() - 1, null);
-		
+		result.setUnit("cm");
 		return result;
 	}
 

@@ -13,7 +13,7 @@ public class SideswingCalculator implements MetricCalculator {
 	
 	@Override
 	public MetricResult calculate(List<FootPrint> footPrints) {
-	    PerStepResult result = new PerStepResult(footPrints, "SideswingCalculator", "Distance between Walkline and Step, where Walkline is the line, " +
+	    PerStepResult result = new PerStepResult(footPrints, "Sideswing", "Distance between Walkline and Step, where Walkline is the line, " +
 	    	                                     "where the average of the distance between all steps and the line is minimal. The Sideswing is messured in Sensors");
 	    
 		
@@ -23,6 +23,7 @@ public class SideswingCalculator implements MetricCalculator {
 		   result.setValueForStep(i, SensorToDistanceConverter.convertSensorUnitToCentimeters(value)); 
 		}
 		
+		result.setUnit("cm");
 		return result;
 	}
 	
