@@ -95,7 +95,7 @@ public class WalkWindowManager {
 	private void convertFolder() {
 		String selectedFolder = null;
 
-	    selectedFolder = "/Users/matej/Uni/IDP/KW 123";
+	    //selectedFolder = "/Users/matej/Uni/IDP/KW 123";
 
 
 		if (selectedFolder == null) {
@@ -130,6 +130,10 @@ public class WalkWindowManager {
 
 			String outputFilepath = selectedFolder + "/" + temp[0] + ".csv";
 			temp = temp[0].split("-");
+			if (temp.length != 2) {
+                log.append("Skipped file [" + inputFilename + "].\n");
+                continue;
+            }
 			String walk = temp[1];
 			temp = temp[0].split("_");
 			if (temp.length != 2) {
