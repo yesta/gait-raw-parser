@@ -7,7 +7,7 @@ import java.util.Map;
 import org.imse.gaitrawparser.data.FootPrint;
 import org.imse.gaitrawparser.data.PressurePoint.Foot;
 
-public class PerGaiteCycleResult extends MetricResult {
+public class PerGaiteCycleResult extends IndexedResult {
 
 	private Map<Integer, Double> absValues =
 		new HashMap<Integer, Double>();
@@ -24,7 +24,7 @@ public class PerGaiteCycleResult extends MetricResult {
 		cycleTimes = CycleTimeCalculator.getCycleTimesForFootPrints(prints);
 	}
 	
-	public int getCyclesCount() {
+	public int getIndicesCount() {
 		return cycleCount;
 	}
 	
@@ -48,7 +48,7 @@ public class PerGaiteCycleResult extends MetricResult {
 		return relValues.get(index);
 	}
 	
-	public Foot getFootForStep(int index) {
+	public Foot getFootForIndex(int index) {
 		return prints.get(index).getFoot();
 	}
 	
