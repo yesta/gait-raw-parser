@@ -55,9 +55,9 @@ public class CalcWindowManager {
 		
 		if (gaitRes.size() > 0) {
 			buff.append("Gait Cycle Values:\n\n");
-			int stepCount = gaitRes.get(0).getCyclesCount();
+			int stepCount = gaitRes.get(0).getIndicesCount();
 			for (int i = 0; i < stepCount; i++) {
-				buff.append("\tCycle that starts with Step: " + i + ", " + gaitRes.get(0).getFootForStep(i) + "\n");
+				buff.append("\tCycle that starts with Step: " + i + ", " + gaitRes.get(0).getFootForIndex(i) + "\n");
 				for (PerGaiteCycleResult g : gaitRes) {
 					buff.append("\t\t" + g.getName() + "\n\t\t\tAbs: " + g.getAbsValueForStep(i) + "\n\t\t\tRel: " + g.getRelValueForStep(i) + "\n");
 				}

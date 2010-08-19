@@ -7,7 +7,7 @@ import java.util.Map;
 import org.imse.gaitrawparser.data.FootPrint;
 import org.imse.gaitrawparser.data.PressurePoint.Foot;
 
-public class PerStepResult extends MetricResult {
+public class PerStepResult extends IndexedResult {
 
 	private int stepCount = -1;
 	private List<FootPrint> prints;
@@ -19,7 +19,7 @@ public class PerStepResult extends MetricResult {
 
 	private Map<Integer, Double> values = new HashMap<Integer, Double>();
 	
-	public int getStepsCount() {
+	public int getIndicesCount() {
 		return stepCount;
 	}
 	
@@ -34,7 +34,7 @@ public class PerStepResult extends MetricResult {
 		return values.get(index);
 	}
 	
-	public Foot getFootForStep(int index) {
+	public Foot getFootForIndex(int index) {
 		return prints.get(index).getFoot();
 	}
 	
