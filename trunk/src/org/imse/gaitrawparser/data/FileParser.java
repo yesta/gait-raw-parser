@@ -11,6 +11,9 @@ import org.eclipse.swt.graphics.Point;
 import org.imse.gaitrawparser.data.PressurePoint.Foot;
 
 public class FileParser {
+	// TODO Tolerance von 10 funktioniert nicht immer...
+	// manchmal muss man es etwas hoeher stellen, damit
+	// Fuessabdruecke erkannt werden.
 	private static final int TOLERANCE = 10;
 
 	private static List<PressurePoint> points;
