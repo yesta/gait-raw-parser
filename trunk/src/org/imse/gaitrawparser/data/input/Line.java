@@ -1,4 +1,4 @@
-package org.imse.gaitrawparser.data;
+package org.imse.gaitrawparser.data.input;
 
 import org.eclipse.swt.graphics.Point;
 

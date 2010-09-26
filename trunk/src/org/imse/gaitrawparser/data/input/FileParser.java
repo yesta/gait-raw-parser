@@ -1,4 +1,4 @@
-package org.imse.gaitrawparser.data;
+package org.imse.gaitrawparser.data.input;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
-import org.imse.gaitrawparser.data.PressurePoint.Foot;
+import org.imse.gaitrawparser.data.input.PressurePoint.Foot;
 
 public class FileParser {
 	// TODO Tolerance von 10 funktioniert nicht immer...

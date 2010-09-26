@@ -1,10 +1,10 @@
-package org.imse.gaitrawparser.data.calculator;
+package org.imse.gaitrawparser.data.calculation;
 
 import java.util.List;
 
-import org.imse.gaitrawparser.data.DoubleLine;
-import org.imse.gaitrawparser.data.DoublePoint;
-import org.imse.gaitrawparser.data.FootPrint;
+import org.imse.gaitrawparser.data.input.DoubleLine;
+import org.imse.gaitrawparser.data.input.DoublePoint;
+import org.imse.gaitrawparser.data.input.FootPrint;
 
 public class StepTimeCalculator implements MetricCalculator {
 

@@ -1,8 +1,8 @@
-package org.imse.gaitrawparser.data.calculator;
+package org.imse.gaitrawparser.data.calculation;
 
 import java.util.List;
 
-import org.imse.gaitrawparser.data.FootPrint;
+import org.imse.gaitrawparser.data.input.FootPrint;
 
 public interface MetricCalculator {
 

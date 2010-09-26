@@ -1,6 +1,6 @@
-package org.imse.gaitrawparser.data.calculator;
+package org.imse.gaitrawparser.data.calculation;
 
-import org.imse.gaitrawparser.data.PressurePoint.Foot;
+import org.imse.gaitrawparser.data.input.PressurePoint.Foot;
 
 public abstract class IndexedResult extends MetricResult {
 
