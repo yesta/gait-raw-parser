@@ -11,12 +11,12 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
-import org.imse.gaitrawparser.data.DoubleLine;
-import org.imse.gaitrawparser.data.DoublePoint;
-import org.imse.gaitrawparser.data.FootPrint;
-import org.imse.gaitrawparser.data.PressurePoint;
-import org.imse.gaitrawparser.data.PressurePoint.Foot;
-import org.imse.gaitrawparser.data.calculator.SideswingCalculator;
+import org.imse.gaitrawparser.data.calculation.SideswingCalculator;
+import org.imse.gaitrawparser.data.input.DoubleLine;
+import org.imse.gaitrawparser.data.input.DoublePoint;
+import org.imse.gaitrawparser.data.input.FootPrint;
+import org.imse.gaitrawparser.data.input.PressurePoint;
+import org.imse.gaitrawparser.data.input.PressurePoint.Foot;
 
 public class WalkCanvas extends Canvas implements PaintListener {
 
@@ -25,7 +25,7 @@ public class WalkCanvas extends Canvas implements PaintListener {
 	private int height;
 	private int scale = 4;
 	private Color[] colors;
-	private int stepsCount = 0;
+	private int printsCount = 0;
 	private int lenX;
 	private int lenY;
 	private List<FootPrint> footPrints;
@@ -69,7 +69,7 @@ public class WalkCanvas extends Canvas implements PaintListener {
 		
 		int i = 1;
 		for (PressurePoint p : points) {
-			if (i > stepsCount) {
+			if (i > printsCount) {
 				break;
 			}
 			i++;
@@ -121,8 +121,8 @@ public class WalkCanvas extends Canvas implements PaintListener {
 		}*/
 	}
 	
-	public void setStepsCount(int count) {
-		this.stepsCount  = count;
+	public void setPrintsCount(int count) {
+		this.printsCount  = count;
 		
 		redraw();
 	}

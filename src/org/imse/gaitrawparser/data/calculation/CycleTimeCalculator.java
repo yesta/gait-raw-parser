@@ -1,10 +1,10 @@
-package org.imse.gaitrawparser.data.calculator;
+package org.imse.gaitrawparser.data.calculation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.imse.gaitrawparser.data.FootPrint;
+import org.imse.gaitrawparser.data.input.FootPrint;
 
 public class CycleTimeCalculator implements MetricCalculator{
 

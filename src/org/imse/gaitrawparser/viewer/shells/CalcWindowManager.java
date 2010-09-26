@@ -10,11 +10,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Shell;
-import org.imse.gaitrawparser.data.PressurePoint.Foot;
-import org.imse.gaitrawparser.data.calculator.PerGaiteCycleResult;
-import org.imse.gaitrawparser.data.calculator.MetricCalculator;
-import org.imse.gaitrawparser.data.calculator.MetricResult;
-import org.imse.gaitrawparser.data.calculator.PerStepResult;
+import org.imse.gaitrawparser.data.calculation.MetricCalculator;
+import org.imse.gaitrawparser.data.calculation.MetricResult;
+import org.imse.gaitrawparser.data.calculation.PerFootPrintResult;
+import org.imse.gaitrawparser.data.calculation.PerGaiteCycleResult;
+import org.imse.gaitrawparser.data.input.PressurePoint.Foot;
 
 public class CalcWindowManager {	
 	private Shell window;
@@ -40,7 +40,7 @@ public class CalcWindowManager {
 	
 	public void setResult(List<MetricResult> results) {
 		List<PerGaiteCycleResult> gaitRes = new ArrayList<PerGaiteCycleResult>();
-		List<PerStepResult> stepRes = new ArrayList<PerStepResult>();
+		List<PerFootPrintResult> stepRes = new ArrayList<PerFootPrintResult>();
 		List<MetricResult> otherRes = new ArrayList<MetricResult>();
 		for (MetricResult r : results) {
 			if (r instanceof PerGaiteCycleResult) {

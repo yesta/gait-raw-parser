@@ -1,4 +1,4 @@
-package org.imse.gaitrawparser.data.calculator;
+package org.imse.gaitrawparser.data.calculation;
 
 public class SensorToDistanceConverter {
 

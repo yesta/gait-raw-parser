@@ -1,4 +1,4 @@
-package org.imse.gaitrawparser.data;
+package org.imse.gaitrawparser.data.input;
 
 public class LineHelper {
 

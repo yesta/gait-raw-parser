@@ -1,26 +1,26 @@
-package org.imse.gaitrawparser.data.calculator;
+package org.imse.gaitrawparser.data.calculation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
-import org.imse.gaitrawparser.data.DoubleLine;
-import org.imse.gaitrawparser.data.DoublePoint;
-import org.imse.gaitrawparser.data.FootPrint;
-import org.imse.gaitrawparser.data.PressurePoint;
+import org.imse.gaitrawparser.data.input.DoubleLine;
+import org.imse.gaitrawparser.data.input.DoublePoint;
+import org.imse.gaitrawparser.data.input.FootPrint;
+import org.imse.gaitrawparser.data.input.PressurePoint;
 
 public class SideswingCalculator implements MetricCalculator {
 	
 	@Override
 	public MetricResult calculate(List<FootPrint> footPrints) {
-	    PerStepResult result = new PerStepResult(footPrints, "Sideswing", "Distance between Walkline and Step, where Walkline is the line, " +
+	    PerFootPrintResult result = new PerFootPrintResult(footPrints, "Sideswing", "Distance between Walkline and Step, where Walkline is the line, " +
 	    	                                     "where the average of the distance between all steps and the line is minimal. The Sideswing is messured in Sensors");
 	    
 		
 		
 		for(int i = 0; i < footPrints.size(); i++) {
 		   double value = getDistanceFromAxis(calculateMinimalAxis(footPrints), footPrints.get(i).getHeelCenter());
-		   result.setValueForStep(i, SensorToDistanceConverter.convertSensorUnitToCentimeters(value)); 
+		   result.setValueForFootPrint(i, SensorToDistanceConverter.convertSensorUnitToCentimeters(value)); 
 		}
 		
 		result.setUnit("cm");

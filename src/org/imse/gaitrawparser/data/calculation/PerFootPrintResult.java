@@ -1,18 +1,18 @@
-package org.imse.gaitrawparser.data.calculator;
+package org.imse.gaitrawparser.data.calculation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.imse.gaitrawparser.data.FootPrint;
-import org.imse.gaitrawparser.data.PressurePoint.Foot;
+import org.imse.gaitrawparser.data.input.FootPrint;
+import org.imse.gaitrawparser.data.input.PressurePoint.Foot;
 
-public class PerStepResult extends IndexedResult {
+public class PerFootPrintResult extends IndexedResult {
 
-	private int stepCount = -1;
+	private int printCount = -1;
 	private List<FootPrint> prints;
 	
-	public PerStepResult(List<FootPrint> prints, String name, String description) {
+	public PerFootPrintResult(List<FootPrint> prints, String name, String description) {
 		super(name, description);
 		this.prints = prints;
 	}
@@ -20,17 +20,17 @@ public class PerStepResult extends IndexedResult {
 	private Map<Integer, Double> values = new HashMap<Integer, Double>();
 	
 	public int getIndicesCount() {
-		return stepCount;
+		return printCount;
 	}
 	
-	public void setValueForStep(int stepIndex, Double value) {
-		if (stepCount < stepIndex + 1) {
-			stepCount = stepIndex + 1;
+	public void setValueForFootPrint(int printIndex, Double value) {
+		if (printCount < printIndex + 1) {
+			printCount = printIndex + 1;
 		}
-		values.put(stepIndex, value);
+		values.put(printIndex, value);
 	}
 	
-	public Double getValueForStep(int index) {
+	public Double getValueForFootPrint(int index) {
 		return values.get(index);
 	}
 	
@@ -41,12 +41,12 @@ public class PerStepResult extends IndexedResult {
 	public Double getAvg(Foot foot) {
 		double avg = 0.0;
 		double avgCount = 0.0;
-		for (int i = 0; i < stepCount; i++) {
-			if (getValueForStep(i) != null) {
+		for (int i = 0; i < printCount; i++) {
+			if (getValueForFootPrint(i) != null) {
 				if (foot != null && !prints.get(i).getFoot().equals(foot)) {
 					continue;
 				}
-				avg += getValueForStep(i);
+				avg += getValueForFootPrint(i);
 				avgCount++;
 			}
 		}
@@ -72,8 +72,8 @@ public class PerStepResult extends IndexedResult {
 	@Override
 	public String toString() {
 		StringBuffer b = new StringBuffer("Caculator: " + getName() + ", Description: " + getDescription() + "\n");
-		for (int i = 0; i < stepCount; i++) {
-			b.append("\tStep that starts with foot " + i + ", " + prints.get(i).getFoot() + "\n\t\t" + getValueForStep(i) + "\n");
+		for (int i = 0; i < printCount; i++) {
+			b.append("\tFoot print " + i + ", " + prints.get(i).getFoot() + "\n\t\t" + getValueForFootPrint(i) + "\n");
 		}
 		b.append("\tAvg:\n\t\t" + getAvg());
 		b.append("\n\tAvg Left:\n\t\t" + getAvgLeft());

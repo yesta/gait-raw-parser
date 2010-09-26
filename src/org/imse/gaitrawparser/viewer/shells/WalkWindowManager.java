@@ -15,9 +15,9 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
-import org.imse.gaitrawparser.data.FileParser;
-import org.imse.gaitrawparser.data.PressurePoint;
-import org.imse.gaitrawparser.data.calculator.MainCalc;
+import org.imse.gaitrawparser.data.calculation.MainCalc;
+import org.imse.gaitrawparser.data.input.FileParser;
+import org.imse.gaitrawparser.data.input.PressurePoint;
 import org.imse.gaitrawparser.data.output.CSVGenerator;
 import org.imse.gaitrawparser.viewer.controlls.WalkCanvas;
 import org.imse.gaitrawparser.viewer.listeners.ScrollListener;
@@ -79,7 +79,7 @@ public class WalkWindowManager {
 			@Override
 			public void onScrolled(int newVaule) {
 				if (walkLoaded) {
-					canvas.setStepsCount(newVaule);
+					canvas.setPrintsCount(newVaule);
 				}
 			}
 		});

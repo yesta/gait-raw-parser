@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.swing.text.NumberFormatter;
 
-import org.imse.gaitrawparser.data.PressurePoint.Foot;
-import org.imse.gaitrawparser.data.calculator.IndexedResult;
-import org.imse.gaitrawparser.data.calculator.MetricResult;
-import org.imse.gaitrawparser.data.calculator.PerGaiteCycleResult;
-import org.imse.gaitrawparser.data.calculator.PerStepResult;
-import org.imse.gaitrawparser.data.calculator.PerWalkResult;
+import org.imse.gaitrawparser.data.calculation.IndexedResult;
+import org.imse.gaitrawparser.data.calculation.MetricResult;
+import org.imse.gaitrawparser.data.calculation.PerFootPrintResult;
+import org.imse.gaitrawparser.data.calculation.PerGaiteCycleResult;
+import org.imse.gaitrawparser.data.calculation.PerWalkResult;
+import org.imse.gaitrawparser.data.input.PressurePoint.Foot;
 
 public class CSVGenerator {
 
@@ -57,8 +57,8 @@ public class CSVGenerator {
 				if (r instanceof PerGaiteCycleResult) {
 					Double value  = ((PerGaiteCycleResult) r).getAbsValueForStep(i);
 					result.append("," + (value == null ? "" : value));
-				} else if (r instanceof PerStepResult) {
-					Double value = ((PerStepResult) r).getValueForStep(i);
+				} else if (r instanceof PerFootPrintResult) {
+					Double value = ((PerFootPrintResult) r).getValueForFootPrint(i);
 					result.append("," + (value == null ? "" : value));
 				}
 			}

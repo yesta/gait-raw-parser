@@ -1,19 +1,18 @@
-package org.imse.gaitrawparser.data.calculator;
+package org.imse.gaitrawparser.data.calculation;
 
 import java.util.List;
 
-import org.imse.gaitrawparser.data.DoubleLine;
-import org.imse.gaitrawparser.data.DoublePoint;
-import org.imse.gaitrawparser.data.FootPrint;
+import org.imse.gaitrawparser.data.input.DoubleLine;
+import org.imse.gaitrawparser.data.input.DoublePoint;
+import org.imse.gaitrawparser.data.input.FootPrint;
 
 public class StepLengthCalculator implements MetricCalculator {
-
-
+	
 	@Override
-	public PerStepResult calculate(List<FootPrint> footPrints) {
-		PerStepResult result = new PerStepResult(footPrints, "Step Length", "See Gatrite Document 3.4");
+	public PerFootPrintResult calculate(List<FootPrint> footPrints) {
+		PerFootPrintResult result = new PerFootPrintResult(footPrints, "Step Length", "See Gatrite Document 3.4");
 		
-		result.setValueForStep(0, null);
+		result.setValueForFootPrint(0, null);
 		
 		for (int i = 0; i < footPrints.size() - 2; i++) {
 			DoubleLine agLine = new DoubleLine(footPrints.get(i).getHeelCenter(), footPrints.get(i + 2).getHeelCenter());
@@ -26,11 +25,11 @@ public class StepLengthCalculator implements MetricCalculator {
 			if ((new DoublePoint(alVector.x + agVector.x, alVector.y + agVector.y)).getLength() < agVector.getLength()) {
 				alLength *= -1;
 			}
-			result.setValueForStep(i, SensorToDistanceConverter.convertSensorUnitToCentimeters(alLength));
+			result.setValueForFootPrint(i, SensorToDistanceConverter.convertSensorUnitToCentimeters(alLength));
 		}
 
-		result.setValueForStep(footPrints.size() - 2, null);
-		result.setValueForStep(footPrints.size() - 1, null);
+		result.setValueForFootPrint(footPrints.size() - 2, null);
+		result.setValueForFootPrint(footPrints.size() - 1, null);
 		result.setUnit("cm");
 		return result;
 	}

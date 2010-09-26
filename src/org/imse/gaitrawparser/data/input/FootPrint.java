@@ -1,4 +1,4 @@
-package org.imse.gaitrawparser.data;
+package org.imse.gaitrawparser.data.input;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Point;
-import org.imse.gaitrawparser.data.PressurePoint.Foot;
+import org.imse.gaitrawparser.data.input.PressurePoint.Foot;
 
 public abstract class FootPrint {
 

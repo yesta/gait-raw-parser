@@ -1,4 +1,4 @@
-package org.imse.gaitrawparser.data;
+package org.imse.gaitrawparser.data.input;
 
 // TODO Eigentlich sollte Line von DoubleLine erben...
 public class DoubleLine {

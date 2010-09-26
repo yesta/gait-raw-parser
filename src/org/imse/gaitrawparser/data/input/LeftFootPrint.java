@@ -1,8 +1,8 @@
-package org.imse.gaitrawparser.data;
+package org.imse.gaitrawparser.data.input;
 
 
 import org.eclipse.swt.graphics.Point;
-import org.imse.gaitrawparser.data.PressurePoint.Foot;
+import org.imse.gaitrawparser.data.input.PressurePoint.Foot;
 
 public class LeftFootPrint extends FootPrint {
 
