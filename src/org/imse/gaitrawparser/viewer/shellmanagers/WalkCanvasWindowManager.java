@@ -1,4 +1,4 @@
-package org.imse.gaitrawparser.viewer.shells;
+package org.imse.gaitrawparser.viewer.shellmanagers;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,6 +30,7 @@ public class WalkCanvasWindowManager {
 
 	public WalkCanvasWindowManager(Shell aWindow) {
 		this.window = aWindow;
+		window.setText("Walk Canvas");
 		window.setLayout(new FillLayout());
 		canvas = new WalkCanvas(window, SWT.BORDER);
 		

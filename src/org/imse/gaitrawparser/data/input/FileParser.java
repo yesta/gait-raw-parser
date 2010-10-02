@@ -39,12 +39,12 @@ public class FileParser {
 	
 	/**
 	 * This constant is used to find cases where
-	 * GaitRawParser fails. If there are lesss than
-	 * MIN_PRESSURE_POINTS_PER_PRINT pressure points
-	 * in a footprint GaitRawParser assumes that something
-	 * went wrong.
+	 * GaitRawParser fails. If there are less than
+	 * MIN_SENSORS_PER_PRINT sensors with distinct
+	 * coordinates in a footprint GaitRawParser assumes that
+	 * something went wrong.
 	 */
-	private static final int MIN_PRESSURE_POINTS_PER_PRINT = 5;
+	private static final int MIN_SENSORS_PER_PRINT = 4;
 	
 	/**
 	 * This constant is used to find cases where
@@ -244,20 +244,34 @@ public class FileParser {
 		result.setResultType(FileParserResultType.ResultOk);
 		for (int i = 0; i < footPrints.size(); i++) {
 			FootPrint print = footPrints.get(i);
-			if (print.getPressurePoints().size() < MIN_PRESSURE_POINTS_PER_PRINT) {
-				result.setResultType(FileParserResultType.TooSmallPrint);
-				result.setFootPrintProblemIndex(i);
-				break;
+			for (int x = 0; x < lenX; x++) {
+				for (int y = 0; y < lenY; y++) {
+					mat[x][y] = null;
+				}
 			}
 			int minX = Integer.MAX_VALUE;
 			int maxX = Integer.MIN_VALUE;
 			for (PressurePoint p : print.getPressurePoints()) {
+				mat[p.getX()][p.getY()] = p;
 				if (p.getX() < minX) {
 					minX = p.getX();
 				}
 				if (p.getX() > maxX) {
 					maxX = p.getX();
 				}
+			}
+			int distinctSensorsCount = 0;
+			for (int x = 0; x < lenX; x++) {
+				for (int y = 0; y < lenY; y++) {
+					if (mat[x][y] != null) {
+						distinctSensorsCount++;
+					}
+				}
+			}
+			if (distinctSensorsCount < MIN_SENSORS_PER_PRINT) {
+				result.setResultType(FileParserResultType.TooSmallPrint);
+				result.setFootPrintProblemIndex(i);
+				break;
 			}
 			if (maxX - minX > MAX_FOOT_PRINT_SENSORS_LENGTH) {
 				result.setResultType(FileParserResultType.TooBigPrint);
