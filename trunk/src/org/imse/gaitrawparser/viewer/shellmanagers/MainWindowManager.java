@@ -1,4 +1,4 @@
-package org.imse.gaitrawparser.viewer.shells;
+package org.imse.gaitrawparser.viewer.shellmanagers;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -54,6 +54,7 @@ public class MainWindowManager {
 
 	public MainWindowManager(Shell window) {
 		this.window = window;
+		window.setText("GaitRawParser");
 		
 		window.setLayout(new GridLayout());
 		
@@ -261,6 +262,7 @@ public class MainWindowManager {
 			}
 			
 			String result = CSVGenerator.getCSVString(patientId, walk, MainCalc.calculate(r.getFootPrints()));
+			System.out.println("Result obtained for: " + inputFilename);
 			try {
 				FileWriter fwriter = new FileWriter(outputFilepath);
 				BufferedWriter out = new BufferedWriter(fwriter);
@@ -271,7 +273,7 @@ public class MainWindowManager {
 				throw new RuntimeException(e);
 			}
 	    }
-	    
+
 	    outputWindowManager.setText(log.toString());
 		
 	}
