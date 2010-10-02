@@ -37,6 +37,7 @@ public abstract class FootPrint {
 	private DoublePoint p;
 	private DoublePoint n;
 	private DoublePoint heelCenter;
+	private boolean allCalculated = false;
 
 	public FootPrint(int lenX, int lenY) {
 	    firstContact = Double.MAX_VALUE;
@@ -47,8 +48,18 @@ public abstract class FootPrint {
 		pixel = new boolean[lenX][lenY];
 
 	}
+	
+	public boolean getAllIsCalculated() {
+		return allCalculated;
+	}
 
-	public void calculateALRG() {
+	public void calculate() {
+		calculateALRG();
+		calculateCNPE();
+		allCalculated = true;
+	}
+	
+	private void calculateALRG() {
 		calculateInnerPoints();
 		double minDiff = Double.MAX_VALUE;
 		double minDistance = 4;
@@ -168,7 +179,7 @@ public abstract class FootPrint {
 		 */
 	}
 
-	public void calculateCNPE() {
+	private void calculateCNPE() {
 		if (g == null || r == null || a == null || l == null) {
 			throw new RuntimeException("You have to calculate ALRG first.");
 		}
@@ -316,7 +327,7 @@ public abstract class FootPrint {
 		return true;
 	}
 
-	public void calculateInnerPoints() {
+	private void calculateInnerPoints() {
 		if (innerPoints == null) {
 			innerPoints = new ArrayList<Point>();
 			for (int i = 0; i < lenX; i++) {
@@ -331,7 +342,7 @@ public abstract class FootPrint {
 		}
 	}
 
-	public void calculateOuterPoints() {
+	private void calculateOuterPoints() {
 		if (outerPoints == null) {
 			outerPoints = new ArrayList<Point>();
 			for (int i = 0; i < lenX; i++) {

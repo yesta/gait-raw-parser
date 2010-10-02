@@ -25,10 +25,11 @@ public class WalkCanvas extends Canvas implements PaintListener {
 	private int height;
 	private int scale = 4;
 	private Color[] colors;
-	private int printsCount = 0;
+	private int pressurePointsCount = -1;
 	private int lenX;
 	private int lenY;
 	private List<FootPrint> footPrints;
+	private int footPrintsCount = -1;
 
 	public WalkCanvas(Composite parent, int style) {
 		super(parent, style);
@@ -58,6 +59,12 @@ public class WalkCanvas extends Canvas implements PaintListener {
 	public int getWidth() {
 		return width;
 	}
+	
+	public void reset() {
+		points = null;
+		footPrints = null;
+		redraw();
+	}
 
 	public void paintControl(PaintEvent e) {
 		GC gc = e.gc;
@@ -67,38 +74,63 @@ public class WalkCanvas extends Canvas implements PaintListener {
 			return;
 		}
 		
-		int i = 1;
-		for (PressurePoint p : points) {
-			if (i > printsCount) {
-				break;
+		int i = 0;
+		if (pressurePointsCount > -1) {
+			for (PressurePoint p : points) {
+				if (i > pressurePointsCount) {
+					break;
+				}
+				i++;
+				gc.setBackground(getColorForPoint(p, e.display));
+				gc.fillRectangle(p.getX() * (scale), p.getY() * scale, scale, scale);
 			}
-			i++;
-			gc.setBackground(getColorForPoint(p, e.display));
-			gc.fillRectangle(p.getX() * (scale), p.getY() * scale, scale, scale);
+		} else if (footPrintsCount > -1) {
+			Color c1 = new Color(e.display, 200, 50, 50);
+			Color c2 = new Color(e.display, 50, 200, 50);
+			Color currentColor = c1;
+			for (FootPrint print : footPrints) {
+				if (i > footPrintsCount) {
+					break;
+				}
+				i++;
+				for (PressurePoint p : print.getPressurePoints()) {
+					gc.setBackground(currentColor);
+					gc.fillRectangle(p.getX() * (scale), p.getY() * scale, scale, scale);
+				}
+				currentColor = (currentColor == c1) ? c2 : c1;
+			}
 		}
 
 		gc.setLineStyle(SWT.LINE_SOLID);
 		gc.setForeground(new Color(e.display, 0, 0, 0));
 		double scaleD = (double) scale;
+		boolean allCalculatedForAllFootprints = true;
 		for (int j = 0; j < footPrints.size(); j++) {
 			FootPrint fp = footPrints.get(j);
-			gc.drawLine((int) (fp.getA().x * scaleD), (int) (fp.getA().y * scaleD), (int) (fp.getG().x * scaleD), (int) (fp.getG().y * scaleD));
-		    gc.drawLine((int) (fp.getL().x * scaleD), (int) (fp.getL().y * scaleD), (int) (fp.getR().x * scaleD), (int) (fp.getR().y * scaleD));
-		    gc.drawLine((int) (fp.getA().x * scaleD), (int) (fp.getA().y * scaleD), (int) (fp.getL().x * scaleD), (int) (fp.getL().y * scaleD));
-		    gc.drawLine((int) (fp.getG().x * scaleD), (int) (fp.getG().y * scaleD), (int) (fp.getR().x * scaleD), (int) (fp.getR().y * scaleD));
-		    gc.drawLine((int) (fp.getC().x * scaleD), (int) (fp.getC().y * scaleD), (int) (fp.getN().x * scaleD), (int) (fp.getN().y * scaleD));
-		    gc.drawLine((int) (fp.getP().x * scaleD), (int) (fp.getP().y * scaleD), (int) (fp.getE().x * scaleD), (int) (fp.getE().y * scaleD));
-		
-		    if (j < footPrints.size() - 1) {
-		    	FootPrint nextFP = footPrints.get(j + 1);
-		    	gc.drawLine((int) (fp.getHeelCenter().x * scaleD), (int) (fp.getHeelCenter().y * scaleD), (int) (nextFP.getHeelCenter().x * scaleD), (int) (nextFP.getHeelCenter().y * scaleD));
-		    }
+			if (fp.getAllIsCalculated()) {
+				gc.drawLine((int) (fp.getA().x * scaleD), (int) (fp.getA().y * scaleD), (int) (fp.getG().x * scaleD), (int) (fp.getG().y * scaleD));
+			    gc.drawLine((int) (fp.getL().x * scaleD), (int) (fp.getL().y * scaleD), (int) (fp.getR().x * scaleD), (int) (fp.getR().y * scaleD));
+			    gc.drawLine((int) (fp.getA().x * scaleD), (int) (fp.getA().y * scaleD), (int) (fp.getL().x * scaleD), (int) (fp.getL().y * scaleD));
+			    gc.drawLine((int) (fp.getG().x * scaleD), (int) (fp.getG().y * scaleD), (int) (fp.getR().x * scaleD), (int) (fp.getR().y * scaleD));
+			    gc.drawLine((int) (fp.getC().x * scaleD), (int) (fp.getC().y * scaleD), (int) (fp.getN().x * scaleD), (int) (fp.getN().y * scaleD));
+			    gc.drawLine((int) (fp.getP().x * scaleD), (int) (fp.getP().y * scaleD), (int) (fp.getE().x * scaleD), (int) (fp.getE().y * scaleD));
+			
+			    if (j < footPrints.size() - 1) {
+			    	FootPrint nextFP = footPrints.get(j + 1);
+			    	if (nextFP.getAllIsCalculated()) {
+			    		gc.drawLine((int) (fp.getHeelCenter().x * scaleD), (int) (fp.getHeelCenter().y * scaleD), (int) (nextFP.getHeelCenter().x * scaleD), (int) (nextFP.getHeelCenter().y * scaleD));
+			    	}
+			    }
+			} else {
+				allCalculatedForAllFootprints = false;
+			}
 		}
-		DoubleLine axis = (new SideswingCalculator()).calculateMinimalAxis(footPrints);
-		DoublePoint p1 = axis.getP1();
-		DoublePoint p2 = new DoublePoint(axis.getP1().x + axis.getA().x * 400, axis.getP1().y + axis.getA().y * 400);
-		gc.drawLine((int) (p1.x * scaleD), (int) (p1.y * scaleD), (int) (p2.x * scaleD), (int) (p2.y * scaleD));
-		
+		if (allCalculatedForAllFootprints) {
+			DoubleLine axis = (new SideswingCalculator()).calculateMinimalAxis(footPrints);
+			DoublePoint p1 = axis.getP1();
+			DoublePoint p2 = new DoublePoint(axis.getP1().x + axis.getA().x * 400, axis.getP1().y + axis.getA().y * 400);
+			gc.drawLine((int) (p1.x * scaleD), (int) (p1.y * scaleD), (int) (p2.x * scaleD), (int) (p2.y * scaleD));
+		}
 	}
 	
 	private Color getColorForPoint(PressurePoint p, Device device) {
@@ -121,9 +153,15 @@ public class WalkCanvas extends Canvas implements PaintListener {
 		}*/
 	}
 	
-	public void setPrintsCount(int count) {
-		this.printsCount  = count;
-		
+	public void setPressurePointsCount(int count) {
+		this.pressurePointsCount  = count;
+		footPrintsCount = -1;
+		redraw();
+	}
+	
+	public void setFootPrintsCount(int count) {
+		this.pressurePointsCount  = -1;
+		footPrintsCount = count;
 		redraw();
 	}
 
